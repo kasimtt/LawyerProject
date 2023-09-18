@@ -23,11 +23,10 @@
 	<ItemGroup>
 	  <Folder Include="EntityConfiguration\" />
 	  <Folder Include="Services\" />
-	  <Folder Include="Repositories\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\LawyerProject.Domain\LawyerProject.Domain.csproj" />
+	  <ProjectReference Include="..\LawyerProject.Application\LawyerProject.Application.csproj" />
 	</ItemGroup>
 
 
