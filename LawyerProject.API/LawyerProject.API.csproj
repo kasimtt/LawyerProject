@@ -24,6 +24,14 @@
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
 		<PackageReference Include="Serilog.Sinks.MSSqlServer" Version="6.3.0" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Controllers\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\LawyerProject.Application\LawyerProject.Application.csproj" />
+	  <ProjectReference Include="..\LawyerProject.AspNetCore\LawyerProject.AspNetCore.csproj" />
+	  <ProjectReference Include="..\LawyerProject.Persistence\LawyerProject.Persistence.csproj" />
+	</ItemGroup>
 
 
 

@@ -26,13 +26,13 @@ namespace LawyerProject.AspNetCore.Infrastracture
                     description.GroupName,
                     new OpenApiInfo()
                     {
-                        Title = $"Emintas {description.ApiVersion}",
+                        Title = $"LawyerProject {description.ApiVersion}",
                         Version = description.ApiVersion.ToString(),
                         Contact = new OpenApiContact()
                         {
                             Url = new Uri("https://www.google.com"),
-                            Email = "email@email.com",
-                            Name = "Emintas"
+                            Email = "kasimislamtatli@gmail.com",
+                            Name = "LawyerProject"
                         }
                     });
             }
