@@ -12,8 +12,9 @@ namespace LawyerProject.Domain.Entities
     {
         public int ObjectId { get; set; }
         public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
         public DataState DataState { get; set; } = DataState.Active;
+        //BaseEntity ozelliklerini configurasyonlara eklemeyi unutma panpa
 
     }
 }

@@ -17,6 +17,8 @@ using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using LawyerProject.Persistence.Context;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using LawyerProject.Application;
+using LawyerProject.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -204,6 +206,8 @@ builder.Services.AddDbContext<LawyerProjectContext>(options =>
 });
 #endregion   
 
+builder.Services.AddContainerWithDependenciesApplication();
+builder.Services.AddContainerWithDependenciesPersistence();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

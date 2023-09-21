@@ -25,6 +25,9 @@ namespace LawyerProject.Persistence.EntityConfiguration
                 .HasMaxLength(75);
             builder.Property(a => a.CasePlace).IsRequired()
                 .HasMaxLength(50);
+            builder.Property(a => a.CreatedDate).IsRequired();
+            builder.Property(a=>a.DataState).IsRequired();
+            builder.Property(a=>a.UpdatedDate).IsRequired(false);
         }
     }
 }

@@ -9,11 +9,11 @@ namespace LawyerProject.API.Extensions
     public class UserActivity_ : IActionFilter
     {
         private readonly IUserActivityWriteRepository _userActivityWriteRepository;
-        private readonly IMapper _mapper;
-        public UserActivity_(IUserActivityWriteRepository userActivityWriteRepository, IMapper mapper)
+     
+        public UserActivity_(IUserActivityWriteRepository userActivityWriteRepository)
         {
             _userActivityWriteRepository = userActivityWriteRepository;
-            _mapper = mapper;
+          
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
@@ -45,10 +45,13 @@ namespace LawyerProject.API.Extensions
                 IpAdresi = ipAddress,
                 KullaniciId = userName,
                 Tarih = DateTime.Now,
-                Path = path
+                Path = path,
+                CreatedDate = DateTime.Now,
+                DataState = Domain.Enums.DataState.Active,
+
             };
 
-            await _userActivityWriteRepository.AddAsync(userActiviy);
+             _userActivityWriteRepository.Add(userActiviy);
             _userActivityWriteRepository.Save();
             #endregion
         }

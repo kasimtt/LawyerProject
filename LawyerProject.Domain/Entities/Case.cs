@@ -16,7 +16,7 @@ namespace LawyerProject.Domain.Entities
         public string CaseDescription { get; set; } = string.Empty;
         public CaseType CaseType { get;set; }
         public string Files { get; set; } = string.Empty;
-        public DateTime CaseDate { get; set; }  
+        public DateTime? CaseDate { get; set; }  
 
 
 

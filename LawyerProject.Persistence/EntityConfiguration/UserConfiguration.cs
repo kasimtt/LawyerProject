@@ -30,6 +30,9 @@ namespace LawyerProject.Persistence.EntityConfiguration
                 .HasMaxLength(250);
             builder.Property(u => u.IsAdmin).IsRequired();
             builder.HasMany(u => u.Cases).WithOne(c => c.User).HasForeignKey(u => u.IdUserFK);
+            builder.Property(a => a.CreatedDate).IsRequired();
+            builder.Property(a => a.DataState).IsRequired();
+            builder.Property(a => a.UpdatedDate).IsRequired(false);
         }
     }
 }

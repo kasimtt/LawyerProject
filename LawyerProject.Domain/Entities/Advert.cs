@@ -13,8 +13,8 @@ namespace LawyerProject.Domain.Entities
         public DateTime CaseDate { get; set; }
         public decimal Price { get; set; }  
         public string City { get; set; }
-        public string District { get; set; }
         public string Address { get; set; }
+        public string District { get; set; }
         public string CasePlace { get; set; }
 
 

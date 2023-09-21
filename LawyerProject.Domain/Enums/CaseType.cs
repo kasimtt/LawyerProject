@@ -11,6 +11,6 @@ namespace LawyerProject.Domain.Enums
         None = 0,
         BosanmaDavasi = 1,
         TazminatDavasi = 2,
-        KiraDavasi = 3,
+        KiraDavasi = 3, //Avukata danışılarak buraya gerekli davalar eklenecek
     }
 }
