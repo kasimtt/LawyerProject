@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LawyerProject.Persistence.Migrations
 {
     [DbContext(typeof(LawyerProjectContext))]
-    [Migration("20230921144027_firstMigration")]
-    partial class firstMigration
+    [Migration("20230922134908_update1")]
+    partial class update1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -154,10 +154,10 @@ namespace LawyerProject.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<byte[]>("PasswordHash")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("varbinary(250)");
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()

@@ -46,7 +46,7 @@ namespace LawyerProject.Persistence.Repositories
 
         public async Task<bool> AddRangeAsync(List<T> models)
         {
-            await Table.AddRangeAsync(models);
+            await Table.AddRangeAsync(models);  
             return true;
         }
 
@@ -82,12 +82,14 @@ namespace LawyerProject.Persistence.Repositories
         public bool RemoveRange(List<T> models)
         {
             Table.RemoveRange(models);
+           
             return true;
         }
 
         public async Task<bool> RemoveAsync(int id)
         {
             T model = await Table.FirstOrDefaultAsync(model => model.ObjectId == id);
+            
             return Remove(model);
 
         }

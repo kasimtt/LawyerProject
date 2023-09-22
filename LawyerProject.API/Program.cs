@@ -19,6 +19,8 @@ using LawyerProject.Persistence.Context;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using LawyerProject.Application;
 using LawyerProject.Persistence;
+using LawyerProject.Application.Mappers;
+using LawyerProject.Persistence.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -29,7 +31,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 // IServiceCollection arabirimine Controllers hizmetini ekler. Bu, Web API projesinde denetleyicilerin (Controller'larýn) kullanýlmasýný saðlar.
 builder.Services.AddControllers(opt =>
 {
-    opt.Filters.Add(typeof(UserActivity_));
+    //opt.Filters.Add(typeof(UserActivity_));
+    opt.Filters.Add<ValidationFilter>();
 })
     // FluentValidation kütüphanesinin yapýlandýrmasýný ekler. 
     .AddFluentValidation(configuration =>
@@ -208,6 +211,8 @@ builder.Services.AddDbContext<LawyerProjectContext>(options =>
 
 builder.Services.AddContainerWithDependenciesApplication();
 builder.Services.AddContainerWithDependenciesPersistence();
+
+builder.Services.AddAutoMapper(typeof(CasesProfile));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

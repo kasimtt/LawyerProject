@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LawyerProject.Persistence.Migrations
 {
-    public partial class firstMigration : Migration
+    public partial class update1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -62,7 +62,7 @@ namespace LawyerProject.Persistence.Migrations
                     UserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
-                    PasswordHash = table.Column<byte[]>(type: "varbinary(250)", maxLength: 250, nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     ProfileImage = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     IsAdmin = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),

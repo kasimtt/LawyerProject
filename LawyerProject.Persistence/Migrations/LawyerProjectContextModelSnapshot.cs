@@ -152,10 +152,10 @@ namespace LawyerProject.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<byte[]>("PasswordHash")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("varbinary(250)");
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()

@@ -51,7 +51,7 @@ namespace LawyerProject.API.Extensions
 
             };
 
-             _userActivityWriteRepository.Add(userActiviy);
+            await _userActivityWriteRepository.AddAsync(userActiviy);
             _userActivityWriteRepository.Save();
             #endregion
         }
