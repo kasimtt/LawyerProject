@@ -21,6 +21,7 @@ using LawyerProject.Application;
 using LawyerProject.Persistence;
 using LawyerProject.Application.Mappers;
 using LawyerProject.Persistence.Filters;
+using LawyerProject.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -185,7 +186,7 @@ builder.Services.AddAuthorization(options =>
         // Kullanýcýnýn "NameIdentifier" adýnda bir talepte bulunmasýný gerektiren bir kural ekler. ClaimTypes.NameIdentifier, kullanýcýnýn benzersiz kimlik bilgisini temsil eden bir talep tipini ifade eder. Kullanýcýnýn bu talebi sunmasý gerekmektedir.
         builder.RequireClaim(ClaimTypes.NameIdentifier);
 
-        // Kullanýcýnýn kullanýcý adýnýn "gorkemakcay" olmasýný gerektiren bir kural ekler. Sadece kullanýcý adý "gorkemakcay" olan kullanýcýlar bu yetkilendirme politikasýný geçebilir.
+        // Kullanýcýnýn kullanýcý adýnýn "kasimislamtatli" olmasýný gerektiren bir kural ekler. Sadece kullanýcý adý "kasimislamtatli" olan kullanýcýlar bu yetkilendirme politikasýný geçebilir.
         builder.RequireUserName("kasimislamtatli");
     });
 });
@@ -211,6 +212,7 @@ builder.Services.AddDbContext<LawyerProjectContext>(options =>
 
 builder.Services.AddContainerWithDependenciesApplication();
 builder.Services.AddContainerWithDependenciesPersistence();
+builder.Services.AddContainerWithDependenciesInfrastucture();
 
 builder.Services.AddAutoMapper(typeof(CasesProfile));
 
@@ -229,7 +231,7 @@ if (app.Environment.IsDevelopment())
         {
             options.SwaggerEndpoint(
                 $"{description.GroupName}/swagger.json",
-                $"Emintas API {description.GroupName.ToUpperInvariant()}");
+                $"LawyerProject API {description.GroupName.ToUpperInvariant()}");
         }
     });
 

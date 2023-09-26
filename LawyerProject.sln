@@ -9,15 +9,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastracture", "Infrastracture", "{1A38E262-229B-4545-A454-798B4BD5EA6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LawyerProject.Application", "LawyerProject.Application\LawyerProject.Application.csproj", "{8D43B43A-B0E2-42CE-B55D-D82A8A0F5EA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LawyerProject.Application", "LawyerProject.Application\LawyerProject.Application.csproj", "{8D43B43A-B0E2-42CE-B55D-D82A8A0F5EA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LawyerProject.Domain", "LawyerProject.Domain\LawyerProject.Domain.csproj", "{F0FA1E47-6A1E-4D2B-A812-37BC9BE7081D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LawyerProject.Domain", "LawyerProject.Domain\LawyerProject.Domain.csproj", "{F0FA1E47-6A1E-4D2B-A812-37BC9BE7081D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LawyerProject.AspNetCore", "LawyerProject.AspNetCore\LawyerProject.AspNetCore.csproj", "{B026F2B6-C226-42D8-A2E4-9F9950D44255}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LawyerProject.AspNetCore", "LawyerProject.AspNetCore\LawyerProject.AspNetCore.csproj", "{B026F2B6-C226-42D8-A2E4-9F9950D44255}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LawyerProject.Persistence", "LawyerProject.Persistence\LawyerProject.Persistence.csproj", "{C4C5A50D-7E6E-4A5B-8230-7C3E31F60E57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LawyerProject.Persistence", "LawyerProject.Persistence\LawyerProject.Persistence.csproj", "{C4C5A50D-7E6E-4A5B-8230-7C3E31F60E57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LawyerProject.API", "LawyerProject.API\LawyerProject.API.csproj", "{171E8102-8ABF-4D70-861A-FFBDC9F2C944}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LawyerProject.API", "LawyerProject.API\LawyerProject.API.csproj", "{171E8102-8ABF-4D70-861A-FFBDC9F2C944}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LawyerProject.Infrastructure", "LawyerProject.Infrastructure\LawyerProject.Infrastructure.csproj", "{BAA18278-E554-4663-8DD4-A4679F93C9A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{171E8102-8ABF-4D70-861A-FFBDC9F2C944}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{171E8102-8ABF-4D70-861A-FFBDC9F2C944}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{171E8102-8ABF-4D70-861A-FFBDC9F2C944}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAA18278-E554-4663-8DD4-A4679F93C9A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAA18278-E554-4663-8DD4-A4679F93C9A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAA18278-E554-4663-8DD4-A4679F93C9A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAA18278-E554-4663-8DD4-A4679F93C9A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{B026F2B6-C226-42D8-A2E4-9F9950D44255} = {1A38E262-229B-4545-A454-798B4BD5EA6C}
 		{C4C5A50D-7E6E-4A5B-8230-7C3E31F60E57} = {1A38E262-229B-4545-A454-798B4BD5EA6C}
 		{171E8102-8ABF-4D70-861A-FFBDC9F2C944} = {EC414FA6-7221-4630-A0B2-32E6BF79E689}
+		{BAA18278-E554-4663-8DD4-A4679F93C9A3} = {1A38E262-229B-4545-A454-798B4BD5EA6C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8504F0C3-173D-406C-8A62-4601F87D191E}

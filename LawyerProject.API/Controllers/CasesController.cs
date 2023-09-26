@@ -2,6 +2,7 @@
 using LawyerProject.Application.DTOs.CasesDtos;
 using LawyerProject.Application.Repositories.CaseRepositories;
 using LawyerProject.Application.RequestParameters;
+using LawyerProject.Application.Services;
 using LawyerProject.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +18,17 @@ namespace LawyerProject.API.Controllers
         private readonly ICaseReadRepository _caseReadRepository; //test icin şimdilik repositoryler ile calışıyoruz
         private readonly ICaseWriteRepository _caseWriteRepository;
         private readonly IMapper _mapper;
-        public CasesController(ICaseReadRepository caseReadRepository, ICaseWriteRepository caseWriteRepository, IMapper mapper)
+        private readonly IFileService _fileService;
+
+        public CasesController(ICaseReadRepository caseReadRepository,
+                               ICaseWriteRepository caseWriteRepository,
+                               IMapper mapper,
+                               IFileService fileService)
         {
             _caseReadRepository = caseReadRepository;
             _caseWriteRepository = caseWriteRepository;
             _mapper = mapper;
+            _fileService = fileService;
         }
 
 
@@ -65,8 +72,15 @@ namespace LawyerProject.API.Controllers
             {
                 return Ok("başarıyla güncellendi panpa");
             }
-            return BadRequest("Güncelleme yapılamadı");
+            return BadRequest("Güncelleme sırasında bir hata ile karşılaşıldı");
 
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Upload()
+        {
+            await _fileService.UploadAsync("resource/product-images", Request.Form.Files);
+            return Ok();
         }
     }
 }
