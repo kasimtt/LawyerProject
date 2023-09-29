@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using LawyerProject.Application.DTOs.CasesDtos;
+using LawyerProject.Application.Repositories.CasePdfFileRepositories;
 using LawyerProject.Application.Repositories.CaseRepositories;
+using LawyerProject.Application.Repositories.FileRepositories;
+using LawyerProject.Application.Repositories.UserImageFileRepositories;
 using LawyerProject.Application.RequestParameters;
 using LawyerProject.Application.Services;
 using LawyerProject.Domain.Entities;
@@ -10,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 namespace LawyerProject.API.Controllers
-{
+{   //bu controller test icin oluşturulmuştur lütfen dalga geçmeyin :)
     [Route("api/[controller]")]
     [ApiController]
     public class CasesController : ControllerBase
@@ -19,16 +22,34 @@ namespace LawyerProject.API.Controllers
         private readonly ICaseWriteRepository _caseWriteRepository;
         private readonly IMapper _mapper;
         private readonly IFileService _fileService;
+        private readonly IFileReadRepository _fileReadRepository;
+        private readonly IFileWriteRepository _fileWriteRepository;
+        private readonly IUserImageFileReadRepository _userImageFileReadRepository;
+        private readonly IUserImageFileWriteRepository _userImageFileWriteRepository;
+        private readonly ICasePdfFileWriteRepository _casePdfFileWriteRepository;
+        private readonly IUserImageFileReadRepository _currentUserImageFileReadRepository;
 
         public CasesController(ICaseReadRepository caseReadRepository,
                                ICaseWriteRepository caseWriteRepository,
                                IMapper mapper,
-                               IFileService fileService)
+                               IFileService fileService,
+                               IFileReadRepository fileReadRepository,
+                               IFileWriteRepository fileWriteRepository,
+                               IUserImageFileReadRepository userImageFileReadRepository,
+                               IUserImageFileWriteRepository userImageFileWriteRepository,
+                               ICasePdfFileWriteRepository casePdfFileWriteRepository,
+                               IUserImageFileReadRepository currentUserImageFileReadRepository)
         {
             _caseReadRepository = caseReadRepository;
             _caseWriteRepository = caseWriteRepository;
             _mapper = mapper;
             _fileService = fileService;
+            _fileReadRepository = fileReadRepository;
+            _fileWriteRepository = fileWriteRepository;
+            _userImageFileReadRepository = userImageFileReadRepository;
+            _userImageFileWriteRepository = userImageFileWriteRepository;
+            _casePdfFileWriteRepository = casePdfFileWriteRepository;
+            _currentUserImageFileReadRepository = currentUserImageFileReadRepository;
         }
 
 
@@ -49,7 +70,7 @@ namespace LawyerProject.API.Controllers
         }
 
         [HttpPost("Add")]
-        public IActionResult Post([FromBody] CreateCaseDto createCaseDto) // şimdilik case şeklinde gönderiyoruz bunları CQRS pattern'e göre düzenlicez
+        public IActionResult Post([FromBody] CreateCaseDto createCaseDto) // şimdilik dto şeklinde gönderiyoruz bunları CQRS pattern'e göre düzenlicez
         {
             Case _case = _mapper.Map<Case>(createCaseDto);
             var result = _caseWriteRepository.Add(_case);
@@ -79,7 +100,7 @@ namespace LawyerProject.API.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Upload()
         {
-            await _fileService.UploadAsync("resource/product-images", Request.Form.Files);
+            await _fileService.UploadAsync("resource/cases-images", Request.Form.Files);
             return Ok();
         }
     }
