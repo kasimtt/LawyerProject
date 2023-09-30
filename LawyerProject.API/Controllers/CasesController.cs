@@ -1,16 +1,14 @@
 ﻿using AutoMapper;
+using LawyerProject.Application.Abstractions.Storage;
 using LawyerProject.Application.DTOs.CasesDtos;
 using LawyerProject.Application.Repositories.CasePdfFileRepositories;
 using LawyerProject.Application.Repositories.CaseRepositories;
 using LawyerProject.Application.Repositories.FileRepositories;
 using LawyerProject.Application.Repositories.UserImageFileRepositories;
 using LawyerProject.Application.RequestParameters;
-using LawyerProject.Application.Services;
 using LawyerProject.Domain.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace LawyerProject.API.Controllers
 {   //bu controller test icin oluşturulmuştur lütfen dalga geçmeyin :)
@@ -21,35 +19,35 @@ namespace LawyerProject.API.Controllers
         private readonly ICaseReadRepository _caseReadRepository; //test icin şimdilik repositoryler ile calışıyoruz
         private readonly ICaseWriteRepository _caseWriteRepository;
         private readonly IMapper _mapper;
-        private readonly IFileService _fileService;
         private readonly IFileReadRepository _fileReadRepository;
         private readonly IFileWriteRepository _fileWriteRepository;
         private readonly IUserImageFileReadRepository _userImageFileReadRepository;
         private readonly IUserImageFileWriteRepository _userImageFileWriteRepository;
         private readonly ICasePdfFileWriteRepository _casePdfFileWriteRepository;
         private readonly IUserImageFileReadRepository _currentUserImageFileReadRepository;
+        private readonly IStorageService _storageService; 
 
         public CasesController(ICaseReadRepository caseReadRepository,
                                ICaseWriteRepository caseWriteRepository,
                                IMapper mapper,
-                               IFileService fileService,
                                IFileReadRepository fileReadRepository,
                                IFileWriteRepository fileWriteRepository,
                                IUserImageFileReadRepository userImageFileReadRepository,
                                IUserImageFileWriteRepository userImageFileWriteRepository,
                                ICasePdfFileWriteRepository casePdfFileWriteRepository,
-                               IUserImageFileReadRepository currentUserImageFileReadRepository)
+                               IUserImageFileReadRepository currentUserImageFileReadRepository,
+                               IStorageService storageService)
         {
             _caseReadRepository = caseReadRepository;
             _caseWriteRepository = caseWriteRepository;
             _mapper = mapper;
-            _fileService = fileService;
             _fileReadRepository = fileReadRepository;
             _fileWriteRepository = fileWriteRepository;
             _userImageFileReadRepository = userImageFileReadRepository;
             _userImageFileWriteRepository = userImageFileWriteRepository;
             _casePdfFileWriteRepository = casePdfFileWriteRepository;
             _currentUserImageFileReadRepository = currentUserImageFileReadRepository;
+            _storageService = storageService;
         }
 
 
@@ -98,10 +96,19 @@ namespace LawyerProject.API.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Upload()
+        public async Task<IActionResult> Upload([FromForm] IFormFileCollection files)// Request.Form.Files ==>angulardan aldığımızda fromform kullanmak yerine request ederek dosyamıza ulasıcağız 
         {
-            await _fileService.UploadAsync("resource/cases-images", Request.Form.Files);
+            var datas = await _storageService.UploadAsync("resource\\case-image", files);//angular clianten gelecek file resource alınacak panpa istersen bunu direct bodyden de gönderebilirsin, senin bileceğin iş
+            await _casePdfFileWriteRepository.AddRangeAsync(datas.Select(d => new CasePdfFile()
+            {
+                FileName = d.fileName,
+                Path = d.pathOrContainerName,
+                Storage = _storageService.StorageName,
+
+            }).ToList());
+            _casePdfFileWriteRepository.Save();
+            
             return Ok();
         }
     }
-}
+} 

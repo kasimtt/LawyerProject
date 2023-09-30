@@ -13,6 +13,7 @@ namespace LawyerProject.Domain.Entities
 
         public string FileName { get; set; } = string.Empty;
         public string Path { get; set; } = string.Empty;
+        public string Storage { get; set; } = string.Empty;
         [NotMapped] //file entitylerinde EntityFramework tarafından(evet tarafından) migration oluşturulurken mapped edilmesini istemiyorum
         public override DateTime? UpdatedDate { get => base.UpdatedDate; set => base.UpdatedDate = value; }
     }

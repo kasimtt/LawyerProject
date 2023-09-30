@@ -16,7 +16,7 @@ namespace LawyerProject.Persistence.EntityConfiguration
             builder.HasKey(f => f.ObjectId);
             builder.Property(f=>f.FileName).IsRequired().HasMaxLength(50);
             builder.Property(f=>f.Path).IsRequired().HasMaxLength(255);
-            
+            builder.Property(f=>f.Storage).IsRequired(false).HasMaxLength(30);
           
         }
     }

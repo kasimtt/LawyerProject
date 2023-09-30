@@ -1,11 +1,6 @@
-﻿using LawyerProject.Application.Services;
-using LawyerProject.Infrastructure.Services;
+﻿using LawyerProject.Application.Abstractions.Storage;
+using LawyerProject.Infrastructure.Services.Storage;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LawyerProject.Infrastructure
 {
@@ -13,7 +8,12 @@ namespace LawyerProject.Infrastructure
     {
         public static void AddContainerWithDependenciesInfrastucture(this IServiceCollection services)
         {
-            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IStorageService, StorageService>();
+        }
+
+        public static void AddStorage<T> (this IServiceCollection services) where T : class, IStorage 
+        {
+          services.AddScoped<IStorage,T>();
         }
     }
 }
