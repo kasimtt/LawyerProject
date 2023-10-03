@@ -23,6 +23,7 @@ using LawyerProject.Application.Mappers;
 using LawyerProject.Persistence.Filters;
 using LawyerProject.Infrastructure;
 using LawyerProject.Infrastructure.Services.Storage.Local;
+using LawyerProject.Infrastructure.Services.Storage.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -214,7 +215,8 @@ builder.Services.AddDbContext<LawyerProjectContext>(options =>
 builder.Services.AddContainerWithDependenciesApplication();
 builder.Services.AddContainerWithDependenciesPersistence();
 builder.Services.AddContainerWithDependenciesInfrastucture();
-builder.Services.AddStorage<LocalStorage>();  // istediðimiz storage burada aktif edebiliriz 
+//builder.Services.AddStorage<LocalStorage>();  // istediðimiz storage burada aktif edebiliriz 
+builder.Services.AddStorage<AzureStorage>();
 
 builder.Services.AddAutoMapper(typeof(CasesProfile));
 

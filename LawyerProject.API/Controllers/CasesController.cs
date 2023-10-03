@@ -96,9 +96,9 @@ namespace LawyerProject.API.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Upload([FromForm] IFormFileCollection files)// Request.Form.Files ==>angulardan aldığımızda fromform kullanmak yerine request ederek dosyamıza ulasıcağız 
+        public async Task<IActionResult> Upload([FromHeader] IFormFileCollection files)// Request.Form.Files ==>angulardan aldığımızda fromform kullanmak yerine request ederek dosyamıza ulasıcağız 
         {
-            var datas = await _storageService.UploadAsync("resource\\case-image", files);//angular clianten gelecek file resource alınacak panpa istersen bunu direct bodyden de gönderebilirsin, senin bileceğin iş
+            var datas = await _storageService.UploadAsync("files", files);//angular clianten gelecek file resource alınacak panpa istersen bunu direct bodyden de gönderebilirsin, senin bileceğin iş
             await _casePdfFileWriteRepository.AddRangeAsync(datas.Select(d => new CasePdfFile()
             {
                 FileName = d.fileName,
