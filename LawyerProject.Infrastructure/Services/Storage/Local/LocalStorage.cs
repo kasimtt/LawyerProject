@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace LawyerProject.Infrastructure.Services.Storage.Local
 {
-    public class LocalStorage : ILocalStorage
+    public class LocalStorage :BaseStorage, ILocalStorage
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
         public LocalStorage(IWebHostEnvironment webHostEnvironment)
@@ -34,9 +34,9 @@ namespace LawyerProject.Infrastructure.Services.Storage.Local
             List<(string fileName, string path)> datas = new();
             foreach (IFormFile file in files)
             {
-              
-                await CopyFileAsync($"{uploadPath}\\{file.Name}", file);
-                datas.Add((file.Name, $"{path}\\{file.Name}"));
+                string NewFileName = await FileRenameAsync(path, file.Name, HasFile);
+                await CopyFileAsync($"{uploadPath}\\{NewFileName}", file);
+                datas.Add((NewFileName, $"{path}\\{NewFileName}"));
                
             }
 

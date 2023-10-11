@@ -11,7 +11,7 @@ namespace LawyerProject.Infrastructure
             services.AddScoped<IStorageService, StorageService>();
         }
 
-        public static void AddStorage<T> (this IServiceCollection services) where T : class, IStorage 
+        public static void AddStorage<T> (this IServiceCollection services) where T : BaseStorage, IStorage 
         {
           services.AddScoped<IStorage,T>();
         }

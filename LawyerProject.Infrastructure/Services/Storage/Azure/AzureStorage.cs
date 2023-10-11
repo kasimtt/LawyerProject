@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace LawyerProject.Infrastructure.Services.Storage.Azure
 {
-    public class AzureStorage : IAzureStorage   //kaynak : gencay yıldız ders 31...
+    public class AzureStorage :BaseStorage, IAzureStorage   //kaynak : gencay yıldız ders 31...
     {
         private readonly BlobServiceClient _blobServiceClient;
         BlobContainerClient _blobContainerClient;
@@ -49,10 +49,11 @@ namespace LawyerProject.Infrastructure.Services.Storage.Azure
             List<(string fileName, string pathOrContainerName)> datas = new();
             foreach (var file in files) 
             {
-
-                BlobClient blobClient = _blobContainerClient.GetBlobClient(file.FileName);
+                
+                string NewFileName = await FileRenameAsync(containerName, file.FileName,HasFile);
+                BlobClient blobClient = _blobContainerClient.GetBlobClient(NewFileName);
                 await blobClient.UploadAsync(file.OpenReadStream());
-                datas.Add((file.Name, containerName));
+                datas.Add((NewFileName, containerName));
             
             }
 
