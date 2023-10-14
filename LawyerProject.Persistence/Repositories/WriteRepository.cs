@@ -101,5 +101,10 @@ namespace LawyerProject.Persistence.Repositories
         {
             _context.SaveChanges();
         }
+
+        public async Task<int> SaveAsync()
+        {
+           return await _context.SaveChangesAsync();
+        }
     }
 }

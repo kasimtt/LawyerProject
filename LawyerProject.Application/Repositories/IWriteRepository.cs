@@ -38,6 +38,7 @@ namespace LawyerProject.Application.Repositories
         #endregion
 
         void Save();
+        Task<int> SaveAsync();
     }
 
 }

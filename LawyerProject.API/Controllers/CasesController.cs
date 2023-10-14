@@ -59,7 +59,6 @@ namespace LawyerProject.API.Controllers
             var result = _caseReadRepository.GetAll().Skip(pagination.Size * pagination.Page).Take(pagination.Size);
             // gecici bunu yapıyorum daha sonra bu işlemler service classlarına alınacak haberin olsun
             IEnumerable<GetCasesDto> entityDto = _mapper.Map<IEnumerable<Case>, IEnumerable<GetCasesDto>>(result);
-
             return Ok(new
             {
                 totalCount,
@@ -68,11 +67,11 @@ namespace LawyerProject.API.Controllers
         }
 
         [HttpPost("Add")]
-        public IActionResult Post([FromBody] CreateCaseDto createCaseDto) // şimdilik dto şeklinde gönderiyoruz bunları CQRS pattern'e göre düzenlicez
+        public async Task<IActionResult> Post([FromBody] CreateCaseDto createCaseDto) // şimdilik dto şeklinde gönderiyoruz bunları CQRS pattern'e göre düzenlicez
         {
             Case _case = _mapper.Map<Case>(createCaseDto);
-            var result = _caseWriteRepository.Add(_case);
-            _caseWriteRepository.Save();
+            var result = await _caseWriteRepository.AddAsync(_case);
+            await _caseWriteRepository.SaveAsync();
 
             if (result)
             {
@@ -98,16 +97,17 @@ namespace LawyerProject.API.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Upload([FromHeader] IFormFileCollection files)// Request.Form.Files ==>angulardan aldığımızda fromform kullanmak yerine request ederek dosyamıza ulasıcağız 
         {
-            var datas = await _storageService.UploadAsync("files", files);//angular clianten gelecek file resource alınacak panpa istersen bunu direct bodyden de gönderebilirsin, senin bileceğin iş
-            await _casePdfFileWriteRepository.AddRangeAsync(datas.Select(d => new CasePdfFile()
+           List<(string fileName, string pathOrContainer)> datas =  await _storageService.UploadAsync("cases-image", files);
+           await _casePdfFileWriteRepository.AddRangeAsync(datas.Select(r => new CasePdfFile
             {
-                FileName = d.fileName,
-                Path = d.pathOrContainerName,
-                Storage = _storageService.StorageName,
+                FileName = r.fileName,
+                CreatedDate = DateTime.Now,
+                Path = r.pathOrContainer,
+                DataState = Domain.Enums.DataState.Active,
+                Storage =_storageService.StorageName,
+                
 
-            }).ToList());
-            _casePdfFileWriteRepository.Save();
-            
+            }).ToList()) ;
             return Ok();
         }
     }

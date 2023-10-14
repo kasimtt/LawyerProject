@@ -1,5 +1,6 @@
 ﻿using LawyerProject.Domain.Entities;
 using LawyerProject.Persistence.EntityConfiguration;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -38,20 +39,31 @@ namespace LawyerProject.Persistence.Context
             //ChangeTracker : Entityler üzerinden yapılan değişiklerin ya da yeni eklenen verinin yakalanmasını sağlayan propertydir. Update operasyonlarında Track edilen verileri yakalayıp elde etmemizi sağlar.
 
             var datas = ChangeTracker
-                 .Entries<BaseEntity>();
+                  .Entries<BaseEntity>();
 
             foreach (var data in datas)
             {
-                _ = data.State switch
+               
+                switch(data.State)
                 {
-                    EntityState.Added => data.Entity.CreatedDate = DateTime.UtcNow,
-                    EntityState.Modified => data.Entity.UpdatedDate = DateTime.UtcNow,
-                    _ => DateTime.UtcNow
-                   
-                };
+                    case EntityState.Modified:
+                        data.Entity.UpdatedDate = DateTime.UtcNow;
+                        //data.Entity.DataState = Domain.Enums.DataState.Active;
+                        if (data.Entity.DataState != Domain.Enums.DataState.Deleted)
+                        {
+                            data.Entity.DataState = Domain.Enums.DataState.Active;
+                        }
+                        
+                        break;
+                    case EntityState.Added:
+                        data.Entity.CreatedDate = DateTime.UtcNow;
+                        data.Entity.DataState = Domain.Enums.DataState.Active;
+                        break;
+                }
             }
-
+              
             return await base.SaveChangesAsync(cancellationToken);
+        
         }
 
         public DbSet<User> Users { get; set; }
