@@ -53,7 +53,7 @@ namespace LawyerProject.Infrastructure.Services.Storage.Azure
                 string NewFileName = await FileRenameAsync(containerName, file.FileName,HasFile);
                 BlobClient blobClient = _blobContainerClient.GetBlobClient(NewFileName);
                 await blobClient.UploadAsync(file.OpenReadStream());
-                datas.Add((NewFileName, containerName));
+                datas.Add((NewFileName, $"{containerName}/{NewFileName}"));
             
             }
 

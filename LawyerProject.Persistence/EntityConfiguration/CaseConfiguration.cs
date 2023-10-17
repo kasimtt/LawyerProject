@@ -29,6 +29,7 @@ namespace LawyerProject.Persistence.EntityConfiguration
             builder.Property(a => a.UpdatedDate).IsRequired(false);
 
             builder.HasOne(c => c.User).WithMany(u => u.Cases).HasForeignKey(c => c.IdUserFK);
+            builder.HasMany(c => c.CasePdfFiles).WithMany(u => u.Cases);
 
         }
     }

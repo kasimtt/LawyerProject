@@ -8,5 +8,6 @@ namespace LawyerProject.Domain.Entities
 {
     public class CasePdfFile: File
     {
+        public ICollection<Case>? Cases { get; set; }  
     }
 }
