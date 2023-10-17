@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
 using LawyerProject.Application.Abstractions.Storage;
 using LawyerProject.Application.DTOs.CasesDtos;
+using LawyerProject.Application.Features.Commands.CreateCase;
+using LawyerProject.Application.Features.Queries.GetAllCase;
 using LawyerProject.Application.Repositories.CasePdfFileRepositories;
 using LawyerProject.Application.Repositories.CaseRepositories;
 using LawyerProject.Application.Repositories.FileRepositories;
 using LawyerProject.Application.Repositories.UserImageFileRepositories;
 using LawyerProject.Application.RequestParameters;
 using LawyerProject.Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
@@ -15,7 +18,7 @@ namespace LawyerProject.API.Controllers
 {   //bu controller test icin oluşturulmuştur lütfen dalga geçmeyin :)
     [Route("api/[controller]")]
     [ApiController]
-    public class CasesController : ControllerBase
+    public class CasesTestController : ControllerBase
     {
         private readonly ICaseReadRepository _caseReadRepository; //test icin şimdilik repositoryler ile calışıyoruz
         private readonly ICaseWriteRepository _caseWriteRepository;
@@ -29,7 +32,9 @@ namespace LawyerProject.API.Controllers
         private readonly IStorageService _storageService; 
         private readonly IConfiguration _configuration;
 
-        public CasesController(ICaseReadRepository caseReadRepository,
+        private readonly IMediator _mediator;
+
+        public CasesTestController(ICaseReadRepository caseReadRepository,
                                ICaseWriteRepository caseWriteRepository,
                                IMapper mapper,
                                IFileReadRepository fileReadRepository,
@@ -39,7 +44,8 @@ namespace LawyerProject.API.Controllers
                                ICasePdfFileWriteRepository casePdfFileWriteRepository,
                                IUserImageFileReadRepository currentUserImageFileReadRepository,
                                IStorageService storageService,
-                               IConfiguration configuration)
+                               IConfiguration configuration,
+                               IMediator mediator)
         {
             _caseReadRepository = caseReadRepository;
             _caseWriteRepository = caseWriteRepository;
@@ -52,36 +58,22 @@ namespace LawyerProject.API.Controllers
             _currentUserImageFileReadRepository = currentUserImageFileReadRepository;
             _storageService = storageService;
             _configuration = configuration;
+            _mediator = mediator;
         }
 
 
         [HttpGet("getall")]
-        public IActionResult Get([FromQuery] Pagination pagination)
+        public async Task<IActionResult> Get([FromQuery] GetAllCaseQueryRequest getAllCaseQueryRequest)
         {
-            // throw new Exception("hata var kardaş hele bak buraya");
-            var totalCount = _caseReadRepository.GetAll().Count();
-            var result = _caseReadRepository.GetAll().Skip(pagination.Size * pagination.Page).Take(pagination.Size);
-            // gecici bunu yapıyorum daha sonra bu işlemler service classlarına alınacak haberin olsun
-            IEnumerable<GetCasesDto> entityDto = _mapper.Map<IEnumerable<Case>, IEnumerable<GetCasesDto>>(result);
-            return Ok(new
-            {
-                totalCount,
-                entityDto,
-            });
+           GetAllCaseQueryResponse getAllCaseQueryResponse =  await _mediator.Send(getAllCaseQueryRequest);
+           return Ok(getAllCaseQueryResponse);
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> Post([FromBody] CreateCaseDto createCaseDto) // şimdilik dto şeklinde gönderiyoruz bunları CQRS pattern'e göre düzenlicez
+        public async Task<IActionResult> Post([FromBody] CreateCaseCommandRequest CreateCaseCommandRequest) // şimdilik dto şeklinde gönderiyoruz bunları CQRS pattern'e göre düzenlicez
         {
-            Case _case = _mapper.Map<Case>(createCaseDto);
-            var result = await _caseWriteRepository.AddAsync(_case);
-            await _caseWriteRepository.SaveAsync();
-
-            if (result)
-            {
-                return Ok("başarıyla kaydedildi panpa");
-            }
-            return BadRequest("kaydetme başarısız");
+             await _mediator.Send(CreateCaseCommandRequest);
+            return Ok("başarıyla eklendi");
         }
 
         [HttpPut("Update")]

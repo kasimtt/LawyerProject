@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace LawyerProject.Application
     {
         public static void AddContainerWithDependenciesApplication(this IServiceCollection services)
         {
-            //buraya validationlar girilecek panpa
+            
+            services.AddMediatR(x => x.RegisterServicesFromAssemblies(typeof(CustomExtensionApplication).Assembly));
 
         }
     }
