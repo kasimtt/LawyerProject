@@ -20,6 +20,10 @@
 	  <ProjectReference Include="..\LawyerProject.Domain\LawyerProject.Domain.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Features\Queries\CasePdfFiles\" />
+	</ItemGroup>
+
 
 
 

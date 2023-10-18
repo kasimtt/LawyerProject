@@ -9,13 +9,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LawyerProject.Application.Features.Queries.GetAllCase
+namespace LawyerProject.Application.Features.Queries.Cases.GetAllCase
 {
-    public class GetAllCaseQueryHandle : IRequestHandler<GetAllCaseQueryRequest, GetAllCaseQueryResponse>
+    public class GetAllCaseQueryHandler : IRequestHandler<GetAllCaseQueryRequest, GetAllCaseQueryResponse>
     {
         private readonly ICaseReadRepository _caseReadRepository;
         private readonly IMapper _mapper;
-        public GetAllCaseQueryHandle(ICaseReadRepository caseReadRepository, IMapper mapper)
+        public GetAllCaseQueryHandler(ICaseReadRepository caseReadRepository, IMapper mapper)
         {
             _caseReadRepository = caseReadRepository;
             _mapper = mapper;
@@ -32,7 +32,7 @@ namespace LawyerProject.Application.Features.Queries.GetAllCase
                 TotalCount = totalCount,
                 GetCasesDto = entityDto
             };
-           
+
 
         }
     }

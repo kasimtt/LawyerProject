@@ -1,8 +1,13 @@
 ﻿using AutoMapper;
 using LawyerProject.Application.Abstractions.Storage;
 using LawyerProject.Application.DTOs.CasesDtos;
+using LawyerProject.Application.Features.Commands.Case.DeleteCase;
+using LawyerProject.Application.Features.Commands.Case.UpdateCase;
+using LawyerProject.Application.Features.Commands.CasePdfFiles.RemoveCasePdfFile;
+using LawyerProject.Application.Features.Commands.CasePdfFiles.UploadCasePdfFile;
 using LawyerProject.Application.Features.Commands.CreateCase;
-using LawyerProject.Application.Features.Queries.GetAllCase;
+using LawyerProject.Application.Features.Queries.Cases.GetAllCase;
+using LawyerProject.Application.Features.Queries.Cases.GetByIdCase;
 using LawyerProject.Application.Repositories.CasePdfFileRepositories;
 using LawyerProject.Application.Repositories.CaseRepositories;
 using LawyerProject.Application.Repositories.FileRepositories;
@@ -68,6 +73,13 @@ namespace LawyerProject.API.Controllers
            GetAllCaseQueryResponse getAllCaseQueryResponse =  await _mediator.Send(getAllCaseQueryRequest);
            return Ok(getAllCaseQueryResponse);
         }
+        [HttpGet("[action]/{Id}")]
+        public async Task<IActionResult> GetById([FromRoute] GetByIdCaseQueryRequest getByIdCaseQueryRequest)
+        {
+            GetByIdCaseQueryResponse getByIdCaseQueryResponse =await _mediator.Send(getByIdCaseQueryRequest);
+            return Ok(getByIdCaseQueryResponse.GetCaseDtos);
+
+        }
 
         [HttpPost("Add")]
         public async Task<IActionResult> Post([FromBody] CreateCaseCommandRequest CreateCaseCommandRequest) // şimdilik dto şeklinde gönderiyoruz bunları CQRS pattern'e göre düzenlicez
@@ -77,40 +89,28 @@ namespace LawyerProject.API.Controllers
         }
 
         [HttpPut("Update")]
-        public IActionResult Put([FromBody] UpdateCaseDto updateCaseDto)
+        public async  Task<IActionResult> Put([FromBody] UpdateCaseCommandRequest updateCaseCommandRequest)
         {
-            Case _case = _mapper.Map<Case>(updateCaseDto);
-            var result = _caseWriteRepository.Update(_case);
-            _caseWriteRepository.Save();
-            if (result)
-            {
-                return Ok("başarıyla güncellendi panpa");
-            }
-            return BadRequest("Güncelleme sırasında bir hata ile karşılaşıldı");
 
+            UpdateCaseCommandResponse updateCaseCommandResponse= await _mediator.Send(updateCaseCommandRequest);
+            if(updateCaseCommandResponse.success)
+                return Ok();
+            else 
+                return BadRequest();
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Upload([FromHeader] IFormFileCollection files, int id)// Request.Form.Files ==>angulardan aldığımızda fromform kullanmak yerine request ederek dosyamıza ulasıcağız 
         {
-
-            var _case = await _caseReadRepository.GetByIdAsync(id);
-
-           List<(string fileName, string pathOrContainer)> datas =  await _storageService.UploadAsync("cases-image", files);
-           await _casePdfFileWriteRepository.AddRangeAsync(datas.Select(r => new CasePdfFile
+            UploadCasePdfFileCommandRequest uploadCasePdfFileCommandRequest = new UploadCasePdfFileCommandRequest
             {
-                FileName = r.fileName,
-                CreatedDate = DateTime.Now,
-                Path = r.pathOrContainer,
-                Storage =_storageService.StorageName,
-                Cases = new List<Case> { _case}
-
-            }).ToList()) ;
-
-            await _casePdfFileWriteRepository.SaveAsync() ; 
+                FormFiles = files,  //Request.Form.Files yazılacak
+                Id = id
+            };
+             await _mediator.Send(uploadCasePdfFileCommandRequest);
             return Ok();
         }
-
+                                                                                               //from form veya from query olarak güncelleyebiliriz
         [HttpGet("[action]/{id}")]
         public async Task<IActionResult> GetProductImage(int id) {
 
@@ -127,12 +127,27 @@ namespace LawyerProject.API.Controllers
         [HttpDelete("[action]/{id}")]
         public async Task<IActionResult> DeleteImage(int id, int imageId)
         {
-            Case? _case = await _caseReadRepository.Table.Include(c=>c.CasePdfFiles).FirstOrDefaultAsync(c=>c.ObjectId == id); // case(dava) bulunuyor
-            CasePdfFile? casePdfFile = _case?.CasePdfFiles?.FirstOrDefault(p=>p.ObjectId == imageId); // davanın dosyaları bulunuyor
-            _case.CasePdfFiles.Remove(casePdfFile);  //dosya silinip kaydediliyor
-            await _caseWriteRepository.SaveAsync(); // veritabanına kayıt yapılıyor.// dosyalarda mahkeme ve yasal bilgiler bulunduğu için komple silme yetkisi kullanıcılara verilecek.
-
-            return Ok("silindi");
+           RemoveCasePdfFileCommandResponse removeCasePdfFileCommandResponse =   await _mediator.Send(new RemoveCasePdfFileCommandRequest { Id = id, ImageId = imageId});
+            if (removeCasePdfFileCommandResponse.Success)
+                return Ok("silindi");
+            else
+                return BadRequest();
         }
+
+        [HttpPost("[action]/{Id}")]
+
+        public async Task<IActionResult> Delete([FromRoute] DeleteCaseCommandRequest deleteCaseCommandRequest)
+        {
+           DeleteCaseCommandResponse deleteCaseCommandResponse =  await _mediator.Send(deleteCaseCommandRequest);
+            if (deleteCaseCommandResponse.Success)
+            {
+                return Ok();
+            }
+            else
+                return BadRequest();
+           
+        }
+
+
     }
 } 

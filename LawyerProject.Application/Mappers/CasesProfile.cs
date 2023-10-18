@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LawyerProject.Application.DTOs.CasesDtos;
+using LawyerProject.Application.Features.Commands.Case.UpdateCase;
 using LawyerProject.Application.Features.Commands.CreateCase;
 using LawyerProject.Domain.Entities;
 using System;
@@ -18,6 +19,7 @@ namespace LawyerProject.Application.Mappers
            CreateMap<Case,UpdateCaseDto>().ReverseMap();
            CreateMap<Case,GetCaseDto>().ReverseMap();
            CreateMap<Case,CreateCaseCommandRequest>().ReverseMap();
+           CreateMap<Case,UpdateCaseCommandRequest>().ReverseMap();
         }
     }
 }

@@ -5,12 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LawyerProject.Application.Features.Queries.GetAllCase
+namespace LawyerProject.Application.Features.Queries.Cases.GetAllCase
 {
-    public class GetAllCaseQueryResponse 
+    public class GetAllCaseQueryResponse
     {
         public int TotalCount { get; set; }
         public IEnumerable<GetCaseDto>? GetCasesDto { get; set; }
     }
 }
- 
