@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LawyerProject.Application.DTOs.CasesDtos
 {
-    public class GetCaseDto
+    public class GetCaseDto : BaseGetDto
     {
        
         public User? User { get; set; }

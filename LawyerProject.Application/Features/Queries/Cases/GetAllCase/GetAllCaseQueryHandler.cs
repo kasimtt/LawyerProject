@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LawyerProject.Application.DTOs.CasesDtos;
+using LawyerProject.Application.Repositories.AdvertRepositories;
 using LawyerProject.Application.Repositories.CaseRepositories;
 using LawyerProject.Domain.Entities;
 using MediatR;
@@ -24,7 +25,7 @@ namespace LawyerProject.Application.Features.Queries.Cases.GetAllCase
         {
             int totalCount = _caseReadRepository.GetAll(false).Count();
             var result = _caseReadRepository.GetAll(false).Skip(request.Pagination.Page * request.Pagination.Size)
-                .Take(request.Pagination.Size);
+                .Take(request.Pagination.Size).ToList();
             IEnumerable<GetCaseDto> entityDto = _mapper.Map<IEnumerable<Case>, IEnumerable<GetCaseDto>>(result).ToList();
 
             return new()

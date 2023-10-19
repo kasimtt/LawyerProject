@@ -28,6 +28,9 @@ namespace LawyerProject.Persistence.EntityConfiguration
             builder.Property(a => a.CreatedDate).IsRequired();
             builder.Property(a=>a.DataState).IsRequired();
             builder.Property(a=>a.UpdatedDate).IsRequired(false);
+
+            builder.HasOne(a => a.User).WithMany(u => u.Adverts).HasForeignKey(a => a.IdUserFK).IsRequired(false);
+
         }
     }
 }

@@ -29,10 +29,13 @@ namespace LawyerProject.Persistence.EntityConfiguration
             builder.Property(u => u.ProfileImage).IsRequired()
                 .HasMaxLength(250);
             builder.Property(u => u.IsAdmin).IsRequired();
-            builder.HasMany(u => u.Cases).WithOne(c => c.User).HasForeignKey(u => u.IdUserFK);
+           
             builder.Property(a => a.CreatedDate).IsRequired();
             builder.Property(a => a.DataState).IsRequired();
             builder.Property(a => a.UpdatedDate).IsRequired(false);
+
+            builder.HasMany(u => u.Cases).WithOne(c => c.User).HasForeignKey(u => u.IdUserFK);
+            builder.HasMany(a=>a.Adverts).WithOne(c => c.User).HasForeignKey(a => a.IdUserFK).IsRequired(false);
         }
     }
 }
