@@ -25,9 +25,9 @@ namespace LawyerProject.API.Controllers
             CreateAdvertCommandResponse  response =  await mediator.Send(request);
             if(response.Success)
             {
-                return Ok("Başarıyla kaydedilmiştir");
+                return Ok();
             }
-            return BadRequest("Kaydedilemedi");
+            return BadRequest();
         }
 
         [HttpPut("[action]")]
@@ -36,9 +36,9 @@ namespace LawyerProject.API.Controllers
             UpdateAdvertCommandResponse response = await mediator.Send(request);
             if(response.Success)
             {
-                return Ok("başarıyla güncellenmiştir");
+                return Ok();
             }
-            return BadRequest("güncellenemedi");
+            return BadRequest();
         }
         
         [HttpPut("[action]/{Id}")]
@@ -47,9 +47,9 @@ namespace LawyerProject.API.Controllers
            DeleteAdvertCommandResponse response = await mediator.Send(request);
             if(response.Success)
             {
-               return Ok("başarıyla silindi");
+               return Ok();
             }
-           return BadRequest("silinemedi");
+           return BadRequest();
 
         }
 

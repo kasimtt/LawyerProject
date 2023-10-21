@@ -52,7 +52,7 @@ namespace LawyerProject.API.Controllers
         public async Task<IActionResult> Post([FromBody] CreateCaseCommandRequest CreateCaseCommandRequest) // şimdilik dto şeklinde gönderiyoruz bunları CQRS pattern'e göre düzenlicez
         {
             await _mediator.Send(CreateCaseCommandRequest);
-            return Ok("başarıyla eklendi");
+            return Ok();
         }
 
         [HttpPut("Update")]
@@ -93,7 +93,7 @@ namespace LawyerProject.API.Controllers
         {
             RemoveCasePdfFileCommandResponse removeCasePdfFileCommandResponse = await _mediator.Send(new RemoveCasePdfFileCommandRequest { Id = id, ImageId = imageId });
             if (removeCasePdfFileCommandResponse.Success)
-                return Ok("silindi");
+                return Ok();
             else
                 return BadRequest();
         }
