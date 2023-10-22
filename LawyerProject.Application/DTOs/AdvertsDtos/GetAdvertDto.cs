@@ -10,7 +10,8 @@ namespace LawyerProject.Application.DTOs.AdvertsDtos
 {
     public class GetAdvertDto : BaseGetDto
     {
-        public User? User { get; set; }
+        //public User? User { get; set; }
+        public int ObjectId { get; set; }
         public CaseType CaseType { get; set; }
         public DateTime CaseDate { get; set; }
         public decimal Price { get; set; }
