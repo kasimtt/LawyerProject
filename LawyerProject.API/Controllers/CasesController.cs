@@ -66,12 +66,12 @@ namespace LawyerProject.API.Controllers
                 return BadRequest();
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Upload([FromHeader] IFormFileCollection files, int id)// Request.Form.Files ==>angulardan aldığımızda fromform kullanmak yerine request ederek dosyamıza ulasıcağız 
+        [HttpPost("[action]/{id}")]
+        public async Task<IActionResult> Upload([FromRoute] int id)// Request.Form.Files ==>angulardan aldığımızda fromform kullanmak yerine request ederek dosyamıza ulasıcağız 
         {
             UploadCasePdfFileCommandRequest uploadCasePdfFileCommandRequest = new UploadCasePdfFileCommandRequest
             {
-                FormFiles = files,  //Request.Form.Files yazılacak
+                FormFiles = Request.Form.Files,  //Request.Form.Files yazılacak
                 Id = id
             };
             await _mediator.Send(uploadCasePdfFileCommandRequest);
