@@ -14,8 +14,7 @@ namespace LawyerProject.Application.Mappers
     {
         public AppUserProfile()
         {
-            CreateMap<CreateUserCommadRequest, AppUser>();      // Password özelliğini atla
-            CreateMap<AppUser, CreateUserCommadRequest>();
+            CreateMap<CreateUserCommadRequest, AppUser>().ReverseMap();
             
             // İki yönlü eşleme için ReverseMap() kullanmayı unutmayın
           
