@@ -1,5 +1,7 @@
 ﻿using LawyerProject.Domain.Entities;
+using LawyerProject.Domain.Entities.Identity;
 using LawyerProject.Persistence.EntityConfiguration;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace LawyerProject.Persistence.Context
 {
-    public class LawyerProjectContext : DbContext
+    public class LawyerProjectContext : IdentityDbContext<AppUser,AppRole,string>
     {
         public LawyerProjectContext(DbContextOptions<LawyerProjectContext> options) : base(options)
         {

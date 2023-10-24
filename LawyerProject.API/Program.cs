@@ -24,6 +24,7 @@ using LawyerProject.Persistence.Filters;
 using LawyerProject.Infrastructure;
 using LawyerProject.Infrastructure.Services.Storage.Local;
 using LawyerProject.Infrastructure.Services.Storage.Azure;
+using LawyerProject.Domain.Entities.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -199,9 +200,9 @@ builder.Services.AddAuthorization(options =>
 #region Cors
 // IServiceCollection arabirimine CORS (Cross-Origin Resource Sharing) hizmetini ekler. CORS, web uygulamalarýnýn farklý kaynaklardan gelen isteklere izin vermesini saðlayan bir mekanizmadýr.
 // CORS hizmetini eklemek, Web API'nin farklý etki alanlarýndan gelen istekleri kabul etmesini ve gerekirse yanýtlara uygun CORS baþlýklarýný eklemesini saðlar. Bu þekilde, Web API'ye dýþ kaynaklardan eriþim saðlanabilir.
-builder.Services.AddCors(options => options.AddDefaultPolicy(policy=> 
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
 policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()
-)); 
+));
 
 #endregion
 #region DbContext
@@ -213,6 +214,15 @@ builder.Services.AddDbContext<LawyerProjectContext>(options =>
 
     options.UseSqlServer(connectionString, builder => builder.MigrationsAssembly("LawyerProject.Persistence"));
 });
+builder.Services.AddIdentity<AppUser, AppRole>(opt =>  // test ortamýnda olduðu için password configurasyonlarý sýnýflandýrýldý
+{
+    opt.Password.RequireNonAlphanumeric = false;
+    opt.Password.RequiredLength = 2;
+    opt.Password.RequireDigit = false;
+    opt.Password.RequireLowercase = false;
+    opt.Password.RequireUppercase = false;
+}).AddEntityFrameworkStores<LawyerProjectContext>(); // identity iþlemlerine dair tüm storage iþlemleri burada bulunur
+
 #endregion   
 
 builder.Services.AddContainerWithDependenciesApplication();
