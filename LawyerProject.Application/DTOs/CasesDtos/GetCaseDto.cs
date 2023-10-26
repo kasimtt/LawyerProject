@@ -11,8 +11,9 @@ namespace LawyerProject.Application.DTOs.CasesDtos
 {
     public class GetCaseDto : BaseGetDto
     {
-       
-      //  public GetUserDto? User { get; set; }
+
+        //  public GetUserDto? User { get; set; }
+        public int ObjectId { get; set; }
         public int CaseNumber { get; set; }
         public string CaseNot { get; set; } = string.Empty;
         public string CaseDescription { get; set; } = string.Empty;
