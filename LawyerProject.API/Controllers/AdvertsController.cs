@@ -64,6 +64,7 @@ namespace LawyerProject.API.Controllers
         public async Task<IActionResult> GetById([FromRoute] GetByIdAdvertQueryRequest request)
         {
             GetByIdAdvertQueryResponse response = await mediator.Send(request);
+
             return Ok(response); 
         }
 

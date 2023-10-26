@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using LawyerProject.Application.DTOs.UserDtos;
 using LawyerProject.Application.Features.Commands.Adverts.CreateAdvert;
 using LawyerProject.Application.Features.Commands.AppUsers.CreateUser;
+using LawyerProject.Application.Features.Queries.Cases.GetByUserIdCase;
+using LawyerProject.Domain.Entities;
 using LawyerProject.Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
@@ -15,6 +18,7 @@ namespace LawyerProject.Application.Mappers
         public AppUserProfile()
         {
             CreateMap<CreateUserCommadRequest, AppUser>().ReverseMap();
+            CreateMap<User,GetUserDto>().ReverseMap();
             
             // İki yönlü eşleme için ReverseMap() kullanmayı unutmayın
           

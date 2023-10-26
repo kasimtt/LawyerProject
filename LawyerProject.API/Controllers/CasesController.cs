@@ -9,6 +9,7 @@ using LawyerProject.Application.Features.Commands.CreateCase;
 using LawyerProject.Application.Features.Queries.CasePdfFiles.GetCasePdfFile;
 using LawyerProject.Application.Features.Queries.Cases.GetAllCase;
 using LawyerProject.Application.Features.Queries.Cases.GetByIdCase;
+using LawyerProject.Application.Features.Queries.Cases.GetByUserIdCase;
 using LawyerProject.Application.Repositories.CasePdfFileRepositories;
 using LawyerProject.Application.Repositories.CaseRepositories;
 using LawyerProject.Application.Repositories.FileRepositories;
@@ -18,6 +19,7 @@ using LawyerProject.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Collections.Immutable;
 
 namespace LawyerProject.API.Controllers
@@ -109,9 +111,15 @@ namespace LawyerProject.API.Controllers
             }
             else
                 return BadRequest();
-
         }
 
+        [HttpGet("[action]/{Id}")]
+
+        public async Task<IActionResult> GetByUserId([FromRoute] GetByUserIdCaseQueryRequest request)
+        {
+            GetByUserIdCaseQueryResponse response = await _mediator.Send(request);
+            return Ok(response.GetCasesDto);
+        }
 
     }
 }

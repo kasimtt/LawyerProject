@@ -1,4 +1,5 @@
-﻿using LawyerProject.Domain.Entities;
+﻿using LawyerProject.Application.DTOs.UserDtos;
+using LawyerProject.Domain.Entities;
 using LawyerProject.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace LawyerProject.Application.DTOs.CasesDtos
     public class GetCaseDto : BaseGetDto
     {
        
-        public User? User { get; set; }
+      //  public GetUserDto? User { get; set; }
         public int CaseNumber { get; set; }
         public string CaseNot { get; set; } = string.Empty;
         public string CaseDescription { get; set; } = string.Empty;

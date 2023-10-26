@@ -20,6 +20,7 @@ namespace LawyerProject.Application.Mappers
            CreateMap<Case,GetCaseDto>().ReverseMap();
            CreateMap<Case,CreateCaseCommandRequest>().ReverseMap();
            CreateMap<Case,UpdateCaseCommandRequest>().ReverseMap();
+          
         }
     }
 }
