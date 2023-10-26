@@ -138,64 +138,9 @@ builder.Services.AddSwaggerGen(options =>
     // Swagger belgelendirmesine XML belgelendirme dosyasýný dahil etme ayarýný yapar. Bu sayede, API Controller'larýndaki örnekler, parametreler ve dönüþ deðerleri gibi detaylý açýklamalarý Swagger belgelerine ekler.
 });
 #endregion
-#region Authentication - JWT
-// IServiceCollection arabirimine kimlik doðrulama hizmetini ekler. JwtBearerDefaults.AuthenticationScheme, JWT Bearer kimlik doðrulamasýnýn kullanýlmasýný belirtir.
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    // JWT Bearer kimlik doðrulama seçeneklerini yapýlandýrmak için kullanýlýr. 
-    .AddJwtBearer(options =>
-    {
-        // Yapýlandýrmadaki JWT anahtarýný key deðiþkenine atar. JWT anahtarý, token oluþturma ve doðrulama iþlemlerinde kullanýlýr.
-        var key = builder.Configuration["Auth:Jwt:Key"];
 
-        // Yapýlandýrmadaki JWT yayýncýsýný (Issuer) issuer deðiþkenine atar. JWT yayýncýsý, tokenin hangi kaynaktan geldiðini belirtir.
-        var issuer = builder.Configuration["Auth:Jwt:Issuer"];
 
-        // JWT anahtarýný simetrik bir güvenlik anahtara (SymmetricSecurityKey) dönüþtürür. Anahtar, UTF-8 kodlamasýný kullanarak byte dizisinden oluþturulur.
-        var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
-        // Token doðrulama parametrelerini yapýlandýrýr. TokenValidationParameters nesnesi, tokenin doðrulama sürecinde kullanýlan parametreleri içerir.
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            // Tokenin hedef kitle (audience) doðrulamasýný devre dýþý býrakýr.
-            ValidateAudience = false,
-
-            // Tokenin yayýncý (issuer) doðrulamasýný etkinleþtirir.
-            ValidateIssuer = true,
-
-            // Tokenin süresi dolmuþ (expired) olup olmadýðýný doðrular.
-            ValidateLifetime = true,
-
-            // Yayýncý tarafýndan kullanýlan imza anahtarýnýn doðrulanmasýný etkinleþtirir.
-            ValidateIssuerSigningKey = true,
-
-            // Doðrulama için kabul edilen yayýncýyý belirtir.
-            ValidIssuer = issuer,
-
-            // Ýmza anahtarýný belirtir. Yayýncý tarafýndan kullanýlan anahtar, doðrulama iþlemi sýrasýnda kullanýlýr.
-            IssuerSigningKey = symmetricKey
-        };
-    });
-#endregion
-#region Authorization - Policy
-// IServiceCollection arabirimine yetkilendirme (authorization) hizmetini ekler. 
-builder.Services.AddAuthorization(options =>
-{
-    // HasSpecialRules adýnda bir yetkilendirme politikasý ekler. Yetkilendirme politikasý, belirli bir kural kümesine dayanarak kullanýcýnýn eriþimini kontrol etmek için kullanýlýr. 
-    options.AddPolicy("HasSpecialRules", builder =>
-    {
-        // Kullanýcýnýn "Admin" rolüne sahip olmasýný gerektiren bir kural ekler. Bu, sadece "Admin" rolüne sahip kullanýcýlarýn bu yetkilendirme politikasýný geçebileceði anlamýna gelir.
-        builder.RequireRole("Admin");
-
-        // Kullanýcýnýn "NameIdentifier" adýnda bir talepte bulunmasýný gerektiren bir kural ekler. ClaimTypes.NameIdentifier, kullanýcýnýn benzersiz kimlik bilgisini temsil eden bir talep tipini ifade eder. Kullanýcýnýn bu talebi sunmasý gerekmektedir.
-        builder.RequireClaim(ClaimTypes.NameIdentifier);
-
-        // Kullanýcýnýn kullanýcý adýnýn "kasimislamtatli" olmasýný gerektiren bir kural ekler. Sadece kullanýcý adý "kasimislamtatli" olan kullanýcýlar bu yetkilendirme politikasýný geçebilir.
-        builder.RequireUserName("kasimislamtatli");
-    });
-});
-#endregion
-
-//->Automapperlari eklemeyi unutma kanka
 
 #region Cors
 // IServiceCollection arabirimine CORS (Cross-Origin Resource Sharing) hizmetini ekler. CORS, web uygulamalarýnýn farklý kaynaklardan gelen isteklere izin vermesini saðlayan bir mekanizmadýr.
@@ -231,7 +176,7 @@ builder.Services.AddContainerWithDependenciesInfrastucture();
 //builder.Services.AddStorage<LocalStorage>();  // istediðimiz storage burada aktif edebiliriz 
 builder.Services.AddStorage<AzureStorage>();
 
-builder.Services.AddAutoMapper(typeof(CasesProfile));
+builder.Services.AddAutoMapper(typeof(CasesProfile)); //ilgili assemblydeki herhangi bir sýnýfý girmemiz yeterli olcaktýr
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -258,7 +203,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors();
-
+app.UseAuthentication();
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 

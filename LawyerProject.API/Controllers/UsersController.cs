@@ -1,4 +1,5 @@
 ﻿using LawyerProject.Application.Features.Commands.AppUsers.CreateUser;
+using LawyerProject.Application.Features.Commands.AppUsers.LoginUser;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ namespace LawyerProject.API.Controllers
             _mediator = mediator;
         }
         [HttpPost("[action]")] // action'u client isterse kaldırız
-        public async Task<IActionResult> CreateUser(CreateUserCommadRequest request)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserCommadRequest request)
         {
           CreateUserCommandResponse response=  await _mediator.Send(request);
             if(response.Success)
@@ -25,5 +26,14 @@ namespace LawyerProject.API.Controllers
             }
            return BadRequest();
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Login([FromBody] LoginUserCommandRequest request)
+        {
+            LoginUserCommandResponse response = await _mediator.Send(request);
+            return Ok(response);
+        }
+
+
     }
 }
