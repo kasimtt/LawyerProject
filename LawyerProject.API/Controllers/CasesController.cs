@@ -91,9 +91,9 @@ namespace LawyerProject.API.Controllers
         }
 
         [HttpDelete("[action]/{id}")]
-        public async Task<IActionResult> DeleteImage(int id, int imageId)
+        public async Task<IActionResult> DeletePdf(int id, int pdfId)
         {
-            RemoveCasePdfFileCommandResponse removeCasePdfFileCommandResponse = await _mediator.Send(new RemoveCasePdfFileCommandRequest { Id = id, ImageId = imageId });
+            RemoveCasePdfFileCommandResponse removeCasePdfFileCommandResponse = await _mediator.Send(new RemoveCasePdfFileCommandRequest { Id = id, ImageId = pdfId });
             if (removeCasePdfFileCommandResponse.Success)
                 return Ok();
             else
