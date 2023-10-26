@@ -21,7 +21,6 @@ namespace LawyerProject.Persistence.EntityConfiguration
             builder.Property(c=>c.CaseDescription).IsRequired(false)
                 .HasMaxLength(200);
             builder.Property(c=>c.CaseType).IsRequired();
-            builder.Property(c=>c.Files).IsRequired(false);
             builder.Property(c => c.CaseDate).IsRequired(false);
 
             builder.Property(a => a.CreatedDate).IsRequired();

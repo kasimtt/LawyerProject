@@ -16,9 +16,7 @@ namespace LawyerProject.Domain.Entities
         public string CaseNot { get; set; } = string.Empty;
         public string CaseDescription { get; set; } = string.Empty;
         public CaseType CaseType { get;set; }
-        public string Files { get; set; } = string.Empty;  //muhtemelen silinecek
         public DateTime? CaseDate { get; set; }  
-        
         public ICollection<CasePdfFile>? CasePdfFiles { get; set; }
 
 
