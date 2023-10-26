@@ -3,6 +3,7 @@ using LawyerProject.Application.Features.Commands.Adverts.DeleteAdvert;
 using LawyerProject.Application.Features.Commands.Adverts.UpdateAdvert;
 using LawyerProject.Application.Features.Queries.Adverts.GetAllAdvert;
 using LawyerProject.Application.Features.Queries.Adverts.GetByIdAdvert;
+using LawyerProject.Application.RequestParameters;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -54,12 +55,11 @@ namespace LawyerProject.API.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAll([FromQuery] GetAllAdvertQueryRequest request)
+        public async Task<IActionResult> GetAll([FromQuery] Pagination pagination)
         {
-            GetAllAdvertQueryResponse response = await mediator.Send(request);
+            GetAllAdvertQueryResponse response = await mediator.Send(new GetAllAdvertQueryRequest { Pagination = pagination });
             return Ok(response);
         }
-
         [HttpGet("[action]/{Id}")] 
         public async Task<IActionResult> GetById([FromRoute] GetByIdAdvertQueryRequest request)
         {

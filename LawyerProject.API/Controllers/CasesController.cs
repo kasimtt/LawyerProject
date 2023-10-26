@@ -34,7 +34,7 @@ namespace LawyerProject.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("getall")]
+        [HttpGet("getall")]  //ileride lazım olması durumunda pagination işlemi eklenecek.
         public async Task<IActionResult> Get([FromQuery] GetAllCaseQueryRequest getAllCaseQueryRequest)
         {
             GetAllCaseQueryResponse getAllCaseQueryResponse = await _mediator.Send(getAllCaseQueryRequest);
