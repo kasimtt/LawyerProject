@@ -1,4 +1,6 @@
-﻿using LawyerProject.Application.Exceptions;
+﻿using LawyerProject.Application.Abstractions.Token;
+using LawyerProject.Application.DTOs.TokenDtos;
+using LawyerProject.Application.Exceptions;
 using LawyerProject.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -14,11 +16,15 @@ namespace LawyerProject.Application.Features.Commands.AppUsers.LoginUser
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly ITokenHandler _tokenHandler;
 
-        public LoginUserCommandHandler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public LoginUserCommandHandler(UserManager<AppUser> userManager, 
+            SignInManager<AppUser> signInManager,
+            ITokenHandler tokenHandler)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _tokenHandler = tokenHandler;
         }
 
         public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
@@ -33,13 +39,10 @@ namespace LawyerProject.Application.Features.Commands.AppUsers.LoginUser
 
             if (result.Succeeded) //authentication başarılı
             {
-                //yetkileri belirlicez
-                return new LoginUserCommandResponse();
+                Token token = _tokenHandler.CreateAccessToken(5);
+                return new LoginUserCommandResponse { Token = token };
             }
-            else
-            {
-                throw new();
-            }
+            throw new AuthenticationErrorException();
 
             
 

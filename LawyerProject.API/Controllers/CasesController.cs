@@ -17,15 +17,17 @@ using LawyerProject.Application.Repositories.UserImageFileRepositories;
 using LawyerProject.Application.RequestParameters;
 using LawyerProject.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Immutable;
 
 namespace LawyerProject.API.Controllers
-{   //bu controller test icin oluşturulmuştur lütfen dalga geçmeyin :)
+{   
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes ="Admin")]
     public class CasesController : ControllerBase
     {
 
@@ -37,9 +39,10 @@ namespace LawyerProject.API.Controllers
         }
 
         [HttpGet("getall")]  //ileride lazım olması durumunda pagination işlemi eklenecek.
-        public async Task<IActionResult> Get([FromQuery] GetAllCaseQueryRequest getAllCaseQueryRequest)
+        public async Task<IActionResult> Get([FromQuery] Pagination pagination)
         {
-            GetAllCaseQueryResponse getAllCaseQueryResponse = await _mediator.Send(getAllCaseQueryRequest);
+            GetAllCaseQueryRequest request = new GetAllCaseQueryRequest { Pagination = pagination};
+            GetAllCaseQueryResponse getAllCaseQueryResponse = await _mediator.Send(request);
             return Ok(getAllCaseQueryResponse);
         }
         [HttpGet("[action]/{Id}")]
@@ -79,7 +82,7 @@ namespace LawyerProject.API.Controllers
             await _mediator.Send(uploadCasePdfFileCommandRequest);
             return Ok();
         }
-        //from form veya from query olarak güncelleyebiliriz
+        //fromform veya fromquery olarak güncelleyebiliriz
         [HttpGet("[action]/{Id}")]
         public async Task<IActionResult> GetCasePdfFile([FromRoute] GetCasePdfFileQueryRequest getCasePdfFileQueryRequest)
         {

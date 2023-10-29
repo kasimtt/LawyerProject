@@ -26,6 +26,7 @@ using LawyerProject.Infrastructure.Services.Storage.Local;
 using LawyerProject.Infrastructure.Services.Storage.Azure;
 using LawyerProject.Domain.Entities.Identity;
 
+
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 //var connectionString = ConnectionString.DefaultConnection; //connection string icin bir static sýnýf yazýlabilir.
@@ -139,7 +140,23 @@ builder.Services.AddSwaggerGen(options =>
 });
 #endregion
 
-
+#region Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer("Admin",option =>
+    {
+        option.TokenValidationParameters = new()
+        {
+            ValidateAudience = true, //oluþturulacak tokenin kimlerin/ hangi sitelerin/ hangi originlerin kullanacaðýný belirlediðimiz deðerdir(www.lawyerclient.com)
+            ValidateIssuer = true,  //oluþturulacak  tokenin kimin daðýtýðýmýný ifade eden alandýr(www.lawyerapi.com)
+            ValidateLifetime = true, //oluþturulacak tokenin süresini kontrol edecek alandýr
+            ValidateIssuerSigningKey = true, //üretilecek token deðerinin uygulamamýza ait bir deðer olduðunu ifade eden security key verisinin doðrulanmasýdýr 
+           
+            ValidAudience = builder.Configuration["Token:Audience"],
+            ValidIssuer = builder.Configuration["Token:Issuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"]))
+        };
+    });
+#endregion
 
 
 #region Cors

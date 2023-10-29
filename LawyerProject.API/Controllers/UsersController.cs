@@ -31,7 +31,7 @@ namespace LawyerProject.API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginUserCommandRequest request)
         {
             LoginUserCommandResponse response = await _mediator.Send(request);
-            return Ok(response);
+            return Ok(response.Token); //response veya response.Token donucek. Buraya gelindiğinde client ile konuşulup anlaşılacak
         }
 
 
