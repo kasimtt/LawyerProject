@@ -1,4 +1,6 @@
-﻿using LawyerProject.Application.Repositories.AdvertRepositories;
+﻿using LawyerProject.Application.Abstractions.Services;
+using LawyerProject.Application.Abstractions.Services.Authentication;
+using LawyerProject.Application.Repositories.AdvertRepositories;
 using LawyerProject.Application.Repositories.CasePdfFileRepositories;
 using LawyerProject.Application.Repositories.CaseRepositories;
 using LawyerProject.Application.Repositories.FileRepositories;
@@ -13,6 +15,7 @@ using LawyerProject.Persistence.Repositories.FileRepositories;
 using LawyerProject.Persistence.Repositories.UserActivityRepositories;
 using LawyerProject.Persistence.Repositories.UserImageFileRepositories;
 using LawyerProject.Persistence.Repositories.UserRepositories;
+using LawyerProject.Persistence.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -47,6 +50,11 @@ namespace LawyerProject.Persistence
 
             services.AddScoped<IUserImageFileReadRepository, UserImageFileReadRepository>();
             services.AddScoped<IUserImageFileWriteRepository, UserImageFileWriteRepository>();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IInternalAuthentication, AuthService>();
+            services.AddScoped<IExternalAuthentication, AuthService>();
         }
     }
 }

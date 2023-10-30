@@ -1,4 +1,5 @@
 ﻿using LawyerProject.Application.Features.Commands.AppUsers.CreateUser;
+using LawyerProject.Application.Features.Commands.AppUsers.GoogleLogin;
 using LawyerProject.Application.Features.Commands.AppUsers.LoginUser;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -27,13 +28,7 @@ namespace LawyerProject.API.Controllers
            return BadRequest();
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Login([FromBody] LoginUserCommandRequest request)
-        {
-            LoginUserCommandResponse response = await _mediator.Send(request);
-            return Ok(response.Token); //response veya response.Token donucek. Buraya gelindiğinde client ile konuşulup anlaşılacak
-        }
-
+     
 
     }
 }

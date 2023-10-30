@@ -1,4 +1,5 @@
-﻿using LawyerProject.Application.Abstractions.Token;
+﻿using LawyerProject.Application.Abstractions.Services;
+using LawyerProject.Application.Abstractions.Token;
 using LawyerProject.Application.DTOs.TokenDtos;
 using LawyerProject.Application.Exceptions;
 using LawyerProject.Domain.Entities.Identity;
@@ -14,36 +15,19 @@ namespace LawyerProject.Application.Features.Commands.AppUsers.LoginUser
 {
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, LoginUserCommandResponse>
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-        private readonly ITokenHandler _tokenHandler;
+        private IAuthService _authService;
 
-        public LoginUserCommandHandler(UserManager<AppUser> userManager, 
-            SignInManager<AppUser> signInManager,
-            ITokenHandler tokenHandler)
+        public LoginUserCommandHandler(IAuthService authService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _tokenHandler = tokenHandler;
+            _authService = authService;
         }
 
         public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
         {
-            AppUser user = await _userManager.FindByNameAsync(request.UserNameOrEmail);
-            if (user == null)
-                user = await _userManager.FindByEmailAsync(request.UserNameOrEmail);
-            if (user == null)
-                throw new NotFoundUserException();
 
-          SignInResult result =  await _signInManager.CheckPasswordSignInAsync(user, request.Password,false);
+           Token token = await _authService.LoginAsync(request.UserNameOrEmail, request.Password, 10);
 
-            if (result.Succeeded) //authentication başarılı
-            {
-                Token token = _tokenHandler.CreateAccessToken(5);
-                return new LoginUserCommandResponse { Token = token };
-            }
-            throw new AuthenticationErrorException();
-
+            return new LoginUserCommandResponse { Token  = token };
             
 
         }

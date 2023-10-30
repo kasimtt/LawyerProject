@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using LawyerProject.Application.Abstractions.Services;
+using LawyerProject.Application.DTOs.UserDtos;
 using LawyerProject.Application.Exceptions;
 using LawyerProject.Domain.Entities.Identity;
 using MediatR;
@@ -14,35 +16,26 @@ namespace LawyerProject.Application.Features.Commands.AppUsers.CreateUser
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommadRequest, CreateUserCommandResponse>
     {
         
-        private readonly UserManager<AppUser> _userManager;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
-
-        public CreateUserCommandHandler(UserManager<AppUser> userManager, IMapper mapper)
+        public CreateUserCommandHandler(IUserService userService, IMapper mapper)
         {
-            _userManager = userManager;
+            _userService = userService;
             _mapper = mapper;
         }
         public async Task<CreateUserCommandResponse> Handle(CreateUserCommadRequest request, CancellationToken cancellationToken)
         {
-            AppUser appUser = _mapper.Map<AppUser>(request);
-            appUser.Id = Guid.NewGuid().ToString();
-            
-            
+           
+            CreateUserDto createUserDto = _mapper.Map<CreateUserDto>(request);
 
-            IdentityResult result = await _userManager.CreateAsync(appUser,request.Password); ;
+           CreateUserResponseDto createUserResponseDto =  await _userService.CreateAsync(createUserDto);
 
-            return new CreateUserCommandResponse
+            return new CreateUserCommandResponse()
             {
-                Success = result.Succeeded,
-                Message = "şimdilik boş kalsın sonra bakarız"
+                Success = createUserResponseDto.Success,
+                Message = createUserResponseDto.Message
             };
-
-         
-
-
-
-
-            //   throw new UserCreateFailedException();
+              
 
 
 
