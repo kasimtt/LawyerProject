@@ -10,5 +10,6 @@ namespace LawyerProject.Application.Abstractions.Token
     public interface ITokenHandler
     {
         T.Token CreateAccessToken(int minute);
+        string CreateRefreshToken();
     }
 }

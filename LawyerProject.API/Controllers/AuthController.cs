@@ -1,5 +1,6 @@
 ﻿using LawyerProject.Application.Features.Commands.AppUsers.GoogleLogin;
 using LawyerProject.Application.Features.Commands.AppUsers.LoginUser;
+using LawyerProject.Application.Features.Commands.AppUsers.RefreshTokenLogin;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +23,17 @@ namespace LawyerProject.API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginUserCommandRequest request)
         {
             LoginUserCommandResponse response = await _mediator.Send(request);
-            return Ok(response.Token); //response veya response.Token donucek. Buraya gelindiğinde client ile konuşulup anlaşılacak
+            return Ok(response); //response veya response.Token donucek. Buraya gelindiğinde client ile konuşulup anlaşılacak
         }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> RefreshTokenLogin([FromQuery] RefreshTokenLoginCommandRequest request)
+        {
+            RefreshTokenLoginCommandResponse response = await _mediator.Send(request);
+            return Ok(response);
+        }
+
+
 
         [HttpPost("google-login")]
         public async Task<IActionResult> GoogleLogin(GoogleLoginCommandRequest request) //test icin clientten arayuz yapılmasını beklicez

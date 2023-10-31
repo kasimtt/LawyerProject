@@ -10,5 +10,6 @@ namespace LawyerProject.Application.DTOs.TokenDtos
     {
         public string AccessToken { get; set; }
         public DateTime Expiration { get; set; } //vade, token süresi
+        public string RefreshToken { get; set; } 
     }
 }

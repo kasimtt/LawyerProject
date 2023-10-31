@@ -54,7 +54,7 @@ namespace LawyerProject.API.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> Post([FromBody] CreateCaseCommandRequest CreateCaseCommandRequest) // şimdilik dto şeklinde gönderiyoruz bunları CQRS pattern'e göre düzenlicez
+        public async Task<IActionResult> Post([FromBody] CreateCaseCommandRequest CreateCaseCommandRequest) 
         {
             await _mediator.Send(CreateCaseCommandRequest);
             return Ok();
@@ -72,11 +72,11 @@ namespace LawyerProject.API.Controllers
         }
 
         [HttpPost("[action]/{id}")]
-        public async Task<IActionResult> Upload([FromRoute] int id)// Request.Form.Files ==>angulardan aldığımızda fromform kullanmak yerine request ederek dosyamıza ulasıcağız 
+        public async Task<IActionResult> Upload([FromRoute] int id)// Test için IFormfile kullanabilirsin [frombody,fromquery....]
         {
             UploadCasePdfFileCommandRequest uploadCasePdfFileCommandRequest = new UploadCasePdfFileCommandRequest
             {
-                FormFiles = Request.Form.Files,  //Request.Form.Files yazılacak
+                FormFiles = Request.Form.Files,  
                 Id = id
             };
             await _mediator.Send(uploadCasePdfFileCommandRequest);

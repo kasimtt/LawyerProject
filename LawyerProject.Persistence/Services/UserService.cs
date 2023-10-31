@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LawyerProject.Application.Abstractions.Services;
 using LawyerProject.Application.DTOs.UserDtos;
+using LawyerProject.Application.Exceptions;
 using LawyerProject.Application.Features.Commands.AppUsers.CreateUser;
 using LawyerProject.Domain.Entities.Identity;
 using MediatR;
@@ -50,6 +51,19 @@ namespace LawyerProject.Persistence.Services
 
 
 
+        }
+
+        public async Task UpdateRefreshTokenAsync(string refreshToken,AppUser user, DateTime accessTokenDate, int addOnAccessTokenDate)
+        {
+           
+            if (user != null)
+            {
+                user.RefreshToken = refreshToken;
+                user.RefreshTokenEndDate = accessTokenDate.AddMinutes(addOnAccessTokenDate);
+                await _userManager.UpdateAsync(user);
+            }
+            else
+                throw new NotFoundUserException();
         }
     }
 }

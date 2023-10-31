@@ -13,6 +13,8 @@ namespace LawyerProject.Domain.Entities.Identity
        
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
+        public string? RefreshToken { get; set; } = string.Empty;
+        public DateTime? RefreshTokenEndDate { get; set; } 
         
        
         // public string? ProfileImage { get; set; }

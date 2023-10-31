@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
+using System.Diagnostics;
+using System.Security.Cryptography;
 
 namespace LawyerProject.Infrastructure.Services.Token
 {
@@ -44,9 +46,17 @@ namespace LawyerProject.Infrastructure.Services.Token
             //token oluşturucu sınıfından bir token alalım
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             token.AccessToken = tokenHandler.WriteToken(tokenSecurityToken);
-
-
+           
+            token.RefreshToken = CreateRefreshToken();
             return token;
+        }
+
+        public string CreateRefreshToken()
+        {
+            byte[] number = new byte[32];
+            using RandomNumberGenerator random = RandomNumberGenerator.Create();
+            random.GetBytes(number);
+            return Convert.ToBase64String(number);
         }
     }
 }
