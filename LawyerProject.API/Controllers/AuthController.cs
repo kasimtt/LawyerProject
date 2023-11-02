@@ -26,8 +26,8 @@ namespace LawyerProject.API.Controllers
             return Ok(response); //response veya response.Token donucek. Buraya gelindiğinde client ile konuşulup anlaşılacak
         }
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> RefreshTokenLogin([FromQuery] RefreshTokenLoginCommandRequest request)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> RefreshTokenLogin([FromBody] RefreshTokenLoginCommandRequest request)
         {
             RefreshTokenLoginCommandResponse response = await _mediator.Send(request);
             return Ok(response);
