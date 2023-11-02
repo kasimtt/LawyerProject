@@ -52,7 +52,7 @@ namespace LawyerProject.Persistence.Services
                     {
                         Id = Guid.NewGuid().ToString(),
                         Email = email,
-                        UserName = name,
+                        UserName = email,
                         FirstName = givenName,
                         LastName = familyName,
                     };
