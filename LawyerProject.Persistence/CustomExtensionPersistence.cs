@@ -6,22 +6,14 @@ using LawyerProject.Application.Repositories.CaseRepositories;
 using LawyerProject.Application.Repositories.FileRepositories;
 using LawyerProject.Application.Repositories.UserActivityRepositories;
 using LawyerProject.Application.Repositories.UserImageFileRepositories;
-using LawyerProject.Application.Repositories.UserRepositories;
-using LawyerProject.Domain.Entities;
 using LawyerProject.Persistence.Repositories.AdvertRepositories;
 using LawyerProject.Persistence.Repositories.CasePdfFileRepositories;
 using LawyerProject.Persistence.Repositories.CaseRepositories;
 using LawyerProject.Persistence.Repositories.FileRepositories;
 using LawyerProject.Persistence.Repositories.UserActivityRepositories;
 using LawyerProject.Persistence.Repositories.UserImageFileRepositories;
-using LawyerProject.Persistence.Repositories.UserRepositories;
 using LawyerProject.Persistence.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LawyerProject.Persistence
 {
@@ -29,9 +21,6 @@ namespace LawyerProject.Persistence
     {
         public static void AddContainerWithDependenciesPersistence(this IServiceCollection services)
         {
-
-            services.AddScoped<IUserReadRepository, UserReadRepository>();
-            services.AddScoped<IUserWriteRepository, UserWriteRepository>();
 
             services.AddScoped<IAdvertReadRepository, AdvertReadRepository>();
             services.AddScoped<IAdvertWriteRepository, AdvertWriteRepository>();

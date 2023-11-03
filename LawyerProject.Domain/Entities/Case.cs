@@ -1,4 +1,5 @@
 ﻿
+using LawyerProject.Domain.Entities.Identity;
 using LawyerProject.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -10,13 +11,13 @@ namespace LawyerProject.Domain.Entities
 {
     public class Case : BaseEntity
     {
-        public int IdUserFK { get; set; }
-        public User? User { get; set; }
+        public string IdUserFK { get; set; }
+        public AppUser? User { get; set; }
         public int CaseNumber { get; set; }
         public string CaseNot { get; set; } = string.Empty;
         public string CaseDescription { get; set; } = string.Empty;
-        public CaseType CaseType { get;set; }
-        public DateTime? CaseDate { get; set; }  
+        public CaseType CaseType { get; set; }
+        public DateTime? CaseDate { get; set; }
         public ICollection<CasePdfFile>? CasePdfFiles { get; set; }
 
 

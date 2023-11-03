@@ -18,7 +18,6 @@ namespace LawyerProject.Application.Mappers
         public AppUserProfile()
         {
             CreateMap<CreateUserCommadRequest, AppUser>().ReverseMap();
-            CreateMap<User,GetUserDto>().ReverseMap();
             CreateMap<CreateUserCommadRequest,CreateUserDto>().ReverseMap();
             CreateMap<CreateUserDto,AppUser>().ReverseMap();
             

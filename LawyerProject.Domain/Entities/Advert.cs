@@ -1,4 +1,5 @@
-﻿using LawyerProject.Domain.Enums;
+﻿using LawyerProject.Domain.Entities.Identity;
+using LawyerProject.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,11 @@ namespace LawyerProject.Domain.Entities
 {
     public class Advert : BaseEntity
     {
-        public User? User {get; set;}
-        public int IdUserFK { get; set; }
-        public CaseType CaseType { get; set; } 
+        public string IdUserFK { get; set; }
+        public AppUser? User { get; set; }
+        public CaseType CaseType { get; set; }
         public DateTime CaseDate { get; set; }
-        public decimal Price { get; set; }  
+        public decimal Price { get; set; }
         public string City { get; set; }
         public string Address { get; set; }
         public string District { get; set; }

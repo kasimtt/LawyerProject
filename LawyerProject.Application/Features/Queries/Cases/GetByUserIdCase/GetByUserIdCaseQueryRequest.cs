@@ -10,6 +10,6 @@ namespace LawyerProject.Application.Features.Queries.Cases.GetByUserIdCase
 {
     public class GetByUserIdCaseQueryRequest: IRequest<GetByUserIdCaseQueryResponse>
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
     }
 }
