@@ -11,7 +11,7 @@ namespace LawyerProject.Application.Features.Commands.CreateCase
 {
     public class CreateCaseCommandRequest: IRequest<CreateCaseCommandResponse>
     {
-        public string IdUserFK { get; set; }
+        public string UserNameOrEmail { get; set; }
         public int CaseNumber { get; set; }
         public string CaseNot { get; set; } = string.Empty;
         public string CaseDescription { get; set; } = string.Empty;

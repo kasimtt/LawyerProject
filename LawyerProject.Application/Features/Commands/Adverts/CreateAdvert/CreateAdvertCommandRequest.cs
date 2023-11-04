@@ -10,7 +10,7 @@ namespace LawyerProject.Application.Features.Commands.Adverts.CreateAdvert
 {
     public class CreateAdvertCommandRequest : IRequest<CreateAdvertCommandResponse>
     {
-        public string IdUserFK { get; set; }
+        public string UserNameOrEmail { get; set; }
         public CaseType CaseType { get; set; }
         public DateTime CaseDate { get; set; }
         public decimal Price { get; set; }
