@@ -104,7 +104,6 @@ namespace LawyerProject.API.Controllers
         }
 
         [HttpPost("[action]/{Id}")]
-
         public async Task<IActionResult> Delete([FromRoute] DeleteCaseCommandRequest deleteCaseCommandRequest)
         {
             DeleteCaseCommandResponse deleteCaseCommandResponse = await _mediator.Send(deleteCaseCommandRequest);
@@ -116,9 +115,8 @@ namespace LawyerProject.API.Controllers
                 return BadRequest();
         }
 
-        [HttpGet("[action]/{Id}")]
-
-        public async Task<IActionResult> GetByUserId([FromRoute] GetByUserIdCaseQueryRequest request)
+        [HttpGet("[action]/{UserNameOrEmail}")]
+        public async Task<IActionResult> GetByUser([FromRoute] GetByUserIdCaseQueryRequest request)
         {
             GetByUserIdCaseQueryResponse response = await _mediator.Send(request);
             return Ok(response.GetCasesDto);
