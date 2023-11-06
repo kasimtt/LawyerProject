@@ -36,7 +36,8 @@ namespace LawyerProject.Application.Features.Queries.Cases.GetByUserIdCase
                 user = await _userManager.FindByNameAsync(request.UserNameOrEmail);
             }
 
-            IEnumerable<Case> cases = _caseReadRepository.Table.Include(c => c.User).Where(c => c.IdUserFK == user.Id).ToList();
+            IEnumerable<Case> cases = _caseReadRepository.Table.Include(c => c.User).
+                Where(c => c.IdUserFK == user.Id && c.DataState == Domain.Enums.DataState.Active).ToList();
             IEnumerable<GetCaseDto> getCaseDtos = _mapper.Map<IEnumerable<Case>, IEnumerable<GetCaseDto>>(cases).ToList();
 
             return new GetByUserIdCaseQueryResponse
