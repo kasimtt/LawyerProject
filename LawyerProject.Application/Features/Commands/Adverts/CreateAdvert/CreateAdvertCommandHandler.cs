@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LawyerProject.Application.Exceptions;
 using LawyerProject.Application.Repositories.AdvertRepositories;
 using LawyerProject.Domain.Entities;
 using LawyerProject.Domain.Entities.Identity;
@@ -31,9 +32,14 @@ namespace LawyerProject.Application.Features.Commands.Adverts.CreateAdvert
             if (user == null)
             {
                 user = await _userManager.FindByNameAsync(request.UserNameOrEmail);
+                if(user == null)
+                {
+                    throw new NotFoundUserException();
+                }
             }
 
             Advert advert = _mapper.Map<Advert>(request);
+          
             advert.IdUserFK = user.Id;
 
             bool result = await _advertWriteRepository.AddAsync(advert);

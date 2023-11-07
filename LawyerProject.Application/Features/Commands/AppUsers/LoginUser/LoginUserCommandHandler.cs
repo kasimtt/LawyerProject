@@ -27,6 +27,7 @@ namespace LawyerProject.Application.Features.Commands.AppUsers.LoginUser
 
            Token token = await _authService.LoginAsync(request.UserNameOrEmail, request.Password, 10);
 
+
             return new LoginUserCommandResponse { Token  = token };
             
 
