@@ -1,4 +1,5 @@
 ﻿using LawyerProject.Application.Abstractions.Storage;
+using LawyerProject.Application.Exceptions;
 using LawyerProject.Application.Repositories.CasePdfFileRepositories;
 using LawyerProject.Application.Repositories.CaseRepositories;
 using LawyerProject.Domain.Entities;
@@ -29,6 +30,10 @@ namespace LawyerProject.Application.Features.Commands.CasePdfFiles.UploadCasePdf
         public async Task<UploadCasePdfFileCommandResponse> Handle(UploadCasePdfFileCommandRequest request, CancellationToken cancellationToken)
         {
             C.Case _case = await _caseReadRepository.GetByIdAsync(request.Id);
+            if(_case == null)
+            {
+                throw new NotFoundCaseException();
+            }
 
             List<(string fileName, string pathOrContainer)> datas = await _storageService.UploadAsync("cases-image", request.FormFiles);
             await _casePdfFileWriteRepository.AddRangeAsync(datas.Select(r => new CasePdfFile

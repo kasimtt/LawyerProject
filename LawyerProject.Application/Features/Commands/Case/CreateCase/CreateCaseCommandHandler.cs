@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LawyerProject.Application.Exceptions;
 using LawyerProject.Application.Repositories.CaseRepositories;
 using LawyerProject.Domain.Entities;
 using LawyerProject.Domain.Entities.Identity;
@@ -30,6 +31,10 @@ namespace LawyerProject.Application.Features.Commands.CreateCase
             if (user == null)
             {
                 user = await _userManager.FindByNameAsync(request.UserNameOrEmail);
+                if (user == null)
+                {
+                    throw new NotFoundUserException();
+                }
             }
 
             C.Case _case = _mapper.Map<C.Case>(request);
