@@ -1,4 +1,5 @@
 ﻿using LawyerProject.Application.DTOs.AdvertsDtos;
+using LawyerProject.Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;

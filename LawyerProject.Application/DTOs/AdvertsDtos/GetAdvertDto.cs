@@ -1,4 +1,5 @@
-﻿using LawyerProject.Domain.Entities;
+﻿using LawyerProject.Application.DTOs.UserDtos;
+using LawyerProject.Domain.Entities;
 using LawyerProject.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace LawyerProject.Application.DTOs.AdvertsDtos
 {
     public class GetAdvertDto : BaseGetDto
     {
-        //public User? User { get; set; }
+        public GetUserDto User { get; set; }
         public int ObjectId { get; set; }
         public CaseType CaseType { get; set; }
         public DateTime CaseDate { get; set; }

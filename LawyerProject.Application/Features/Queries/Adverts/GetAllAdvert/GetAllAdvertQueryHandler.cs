@@ -5,6 +5,7 @@ using LawyerProject.Application.Features.Queries.Cases.GetAllCase;
 using LawyerProject.Application.Repositories.AdvertRepositories;
 using LawyerProject.Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,10 +27,10 @@ namespace LawyerProject.Application.Features.Queries.Adverts.GetAllAdvert
 
         public async Task<GetAllAdvertQueryResponse> Handle(GetAllAdvertQueryRequest request, CancellationToken cancellationToken)
         {
-           int totalCount =  _advertReadRepository.GetAll(false).Count();
-           var result = _advertReadRepository.GetAll(false).Skip(request.Pagination.Page*request.Pagination.Size).Take(request.Pagination.Size).ToList();
+            int totalCount = _advertReadRepository.GetAll(false).Count();
+            var result = _advertReadRepository.Table.Include(i => i.User).Skip(request.Pagination.Page * request.Pagination.Size).Take(request.Pagination.Size).ToList();
 
-            IEnumerable<GetAdvertDto> entityDto = _mapper.Map<IEnumerable<Advert>,IEnumerable<GetAdvertDto>>(result).ToList();
+            IEnumerable<GetAdvertDto> entityDto = _mapper.Map<IEnumerable<Advert>, IEnumerable<GetAdvertDto>>(result).ToList();
 
             return new GetAllAdvertQueryResponse
             {
