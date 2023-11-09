@@ -65,7 +65,7 @@ namespace LawyerProject.API.Controllers
         {
             GetByIdAdvertQueryResponse response = await mediator.Send(request);
 
-            return Ok(response); 
+            return Ok(response.Advert); 
         }
 
 
