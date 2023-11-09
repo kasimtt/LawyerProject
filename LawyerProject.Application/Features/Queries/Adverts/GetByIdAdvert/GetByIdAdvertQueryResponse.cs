@@ -9,6 +9,6 @@ namespace LawyerProject.Application.Features.Queries.Adverts.GetByIdAdvert
 {
     public class GetByIdAdvertQueryResponse
     {
-        public GetAdvertDto? Advert { get; set; }
+        public IEnumerable<GetAdvertDto?> Advert { get; set; }
     }
 }

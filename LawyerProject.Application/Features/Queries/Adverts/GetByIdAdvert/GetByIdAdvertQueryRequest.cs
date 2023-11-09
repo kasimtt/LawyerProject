@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace LawyerProject.Application.Features.Queries.Adverts.GetByIdAdvert
 {
-    public class GetByIdAdvertQueryRequest: IRequest<GetByIdAdvertQueryResponse>
+    public class GetByIdAdvertQueryRequest : IRequest<GetByIdAdvertQueryResponse>
     {
-        public int Id { get; set; }
+        public string UserNameOrEmail { get; set; }
     }
 }
