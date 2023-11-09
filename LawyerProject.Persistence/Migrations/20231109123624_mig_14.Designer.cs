@@ -4,6 +4,7 @@ using LawyerProject.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LawyerProject.Persistence.Migrations
 {
     [DbContext(typeof(LawyerProjectContext))]
-    partial class LawyerProjectContextModelSnapshot : ModelSnapshot
+    [Migration("20231109123624_mig_14")]
+    partial class mig_14
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
