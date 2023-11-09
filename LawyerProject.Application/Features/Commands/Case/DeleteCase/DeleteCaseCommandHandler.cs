@@ -1,4 +1,5 @@
-﻿using LawyerProject.Application.Repositories.CaseRepositories;
+﻿using LawyerProject.Application.Exceptions;
+using LawyerProject.Application.Repositories.CaseRepositories;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,11 @@ namespace LawyerProject.Application.Features.Commands.Case.DeleteCase
         public async Task<DeleteCaseCommandResponse> Handle(DeleteCaseCommandRequest request, CancellationToken cancellationToken)
         {
            C.Case _case = await _caseReadRepository.GetByIdAsync(request.Id);
+            if(_case == null)
+            {
+                throw new NotFoundCaseException();
+            }
+
             _case.DataState = Domain.Enums.DataState.Deleted;
             await _caseWriteRepository.SaveAsync();
             return new DeleteCaseCommandResponse { Success = true };
