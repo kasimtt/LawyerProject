@@ -150,7 +150,7 @@ builder.Services.AddSwaggerGen(options =>
 
 #region Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer("Admin",option =>
+    .AddJwtBearer("Admin", option =>
     {
         option.TokenValidationParameters = new()
         {
@@ -230,6 +230,8 @@ if (app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.ConfigureExceptionHandler<Program>(app.Services.GetRequiredService<ILogger<Program>>());
 
 app.UseSerilogRequestLogging();
 app.UseHttpLogging();

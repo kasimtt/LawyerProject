@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Context;
+using System.Net;
 using System.Net.Mime;
 using System.Text.Json;
 
@@ -14,27 +15,18 @@ namespace LawyerProject.API.Extensions
             {
                 builder.Run(async context =>
                 {
-                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     context.Response.ContentType = MediaTypeNames.Application.Json;
-
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if (contextFeature != null)
                     {
-                        var userName = context.User.Identity.IsAuthenticated ? context.User.Identity.Name : "Guest";
-                        LogContext.PushProperty("UserName", userName);
-                        LogContext.PushProperty("ApiPath", context.Request.Path);
-                        LogContext.PushProperty("IpAdres", context.Connection.RemoteIpAddress);
-
-                        var problemDetails = new ProblemDetails
+                        logger.LogError(contextFeature.Error.Message);
+                        await context.Response.WriteAsync(JsonSerializer.Serialize(new
                         {
-                            Title = "Bir hata meydana geldi!",
-                            Status = context.Response.StatusCode,
-                            Detail = contextFeature.Error.Message,
-                            Instance = context.Request.Path
-                        };
-
-                        logger.LogError(JsonSerializer.Serialize(problemDetails));
-                        await context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));
+                            StatusCode = context.Response.StatusCode,
+                            Message = contextFeature.Error.Message,
+                            Title = "Hata Alındı"
+                        }));
                     }
                 });
             });
