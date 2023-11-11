@@ -25,7 +25,10 @@ using LawyerProject.Infrastructure;
 using LawyerProject.Infrastructure.Services.Storage.Local;
 using LawyerProject.Infrastructure.Services.Storage.Azure;
 using LawyerProject.Domain.Entities.Identity;
-
+using LawyerProject.API.Configurations.ColumnWriters;
+using Serilog.Core;
+using Microsoft.AspNetCore.HttpLogging;
+using Serilog.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -60,43 +63,48 @@ builder.Services.AddControllers(opt =>
     });
 #endregion
 
-#region Serilog
-builder.Services.AddLogging();
+SqlColumn sqlColumn = new SqlColumn();
+sqlColumn.ColumnName = "UserName";
+sqlColumn.DataType = System.Data.SqlDbType.NVarChar;
+sqlColumn.PropertyName = "UserName";
+sqlColumn.DataLength = 50;
+sqlColumn.AllowNull = true;
+ColumnOptions columnOpt = new ColumnOptions();
+columnOpt.Store.Remove(StandardColumn.Properties);
+columnOpt.Store.Add(StandardColumn.LogEvent);
+columnOpt.AdditionalColumns = new Collection<SqlColumn> { sqlColumn };
 
-// Veritabanýna aktarým yapýlýrken kullanýlacak konfigürasyonlar "sinkOptions"da belirlenir.
 
-// Veritabaný tablosunun özellikleri "columnOptions"da belirlenir.
-var LogEventsTableColumnOptions = new ColumnOptions
-{
-    AdditionalColumns = new Collection<SqlColumn>
-    {
-        new SqlColumn {ColumnName = "UserName", PropertyName = "UserName", DataType = SqlDbType.VarChar, DataLength = 64},
-        new SqlColumn {ColumnName = "ApiPath", PropertyName = "ApiPath", DataType = SqlDbType.VarChar, NonClusteredIndex = true},
-        new SqlColumn {ColumnName = "IpAdres", PropertyName = "IpAdres", DataType = SqlDbType.VarChar, DataLength = 20}
-    }
-};
-LogEventsTableColumnOptions.Store.Remove(StandardColumn.Properties);
-LogEventsTableColumnOptions.Store.Remove(StandardColumn.MessageTemplate);
 
-Log.Logger = new LoggerConfiguration()
-    .Enrich.FromLogContext()
+Logger log = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log.txt")
     .WriteTo.MSSqlServer(
-        connectionString: connectionString,
-        sinkOptions: new MSSqlServerSinkOptions
-        {
-            TableName = "LogEvents",
-            AutoCreateSqlDatabase = true,
-            AutoCreateSqlTable = true
-        },
-        columnOptions: LogEventsTableColumnOptions,
-        restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information)
+    connectionString: builder.Configuration.GetConnectionString("DefaultConnection"),
+     sinkOptions: new MSSqlServerSinkOptions
+     {
+         AutoCreateSqlTable = true,
+         TableName = "Logs",
+     },
+     appConfiguration: null,
+     columnOptions: columnOpt
+    )
+    .Enrich.FromLogContext()
+    .Enrich.With<CustomUserNameColumn>()
+    .MinimumLevel.Information()
     .CreateLogger();
+builder.Host.UseSerilog(log);
 
-Log.CloseAndFlush();
-builder.Logging.ClearProviders();
-builder.Host.UseSerilog();
 
-#endregion
+builder.Services.AddHttpLogging(logging =>
+{
+    logging.LoggingFields = HttpLoggingFields.All;
+    logging.RequestHeaders.Add("sec-ch-ua");
+    logging.MediaTypeOptions.AddText("application/javascript");
+    logging.RequestBodyLogLimit = 4096;
+    logging.ResponseBodyLogLimit = 4096;
+
+});
 
 #region Api Versioning & Api Explorer
 // IServiceCollection arabirimine ApiVersioning hizmetini ekler. 
@@ -154,8 +162,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = builder.Configuration["Token:Audience"],
             ValidIssuer = builder.Configuration["Token:Issuer"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
-            LifetimeValidator = (notBefore, expires, securityToken, validationParameters) => expires != null ? expires > DateTime.UtcNow : false
-            
+            LifetimeValidator = (notBefore, expires, securityToken, validationParameters) => expires != null ? expires > DateTime.UtcNow : false,
+            NameClaimType = ClaimTypes.Name
         };
     });
 #endregion
@@ -223,12 +231,22 @@ if (app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseSerilogRequestLogging();
+app.UseHttpLogging();
+
 app.UseCors();
 app.UseAuthentication();
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.Use(async (LawyerProjectContext, next) =>
+{
+    var username = LawyerProjectContext.User?.Identity?.IsAuthenticated != null || true ? LawyerProjectContext.User.Identity.Name : null;
+    LogContext.PushProperty("UserName", username);
+    await next();
+});
 
 app.MapControllers();
 

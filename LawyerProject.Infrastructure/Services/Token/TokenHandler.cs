@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Diagnostics;
 using System.Security.Cryptography;
+using LawyerProject.Domain.Entities.Identity;
+using System.Security.Claims;
 
 namespace LawyerProject.Infrastructure.Services.Token
 {
@@ -22,7 +24,7 @@ namespace LawyerProject.Infrastructure.Services.Token
             _configuration = configuration;
         }
 
-        public T.Token CreateAccessToken(int minute)
+        public T.Token CreateAccessToken(int minute, AppUser user)
         {
             T.Token token = new();
             //securityKeyin simetriğini alıyoruz
@@ -39,7 +41,8 @@ namespace LawyerProject.Infrastructure.Services.Token
                 issuer: _configuration["Token:Issuer"],
                 expires: token.Expiration,
                 notBefore: DateTime.UtcNow,
-                signingCredentials: signingCredentials
+                signingCredentials: signingCredentials,
+                claims:new List<Claim>{ new(ClaimTypes.Name, user.UserName) }
 
                 ) ;
 
