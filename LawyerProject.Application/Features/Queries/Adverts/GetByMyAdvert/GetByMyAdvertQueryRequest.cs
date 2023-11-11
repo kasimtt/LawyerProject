@@ -1,4 +1,4 @@
-﻿using LawyerProject.Application.DTOs.AdvertsDtos;
+﻿using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace LawyerProject.Application.Features.Queries.Adverts.GetByIdAdvert
 {
-    public class GetByIdAdvertQueryResponse
+    public class GetByMyAdvertQueryRequest : IRequest<GetByMyAdvertQueryResponse>
     {
-        public IEnumerable<GetAdvertDto?> Advert { get; set; }
+        public string UserNameOrEmail { get; set; }
     }
 }

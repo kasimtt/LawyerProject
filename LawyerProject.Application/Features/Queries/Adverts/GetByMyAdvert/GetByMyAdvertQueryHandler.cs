@@ -16,20 +16,20 @@ using System.Threading.Tasks;
 
 namespace LawyerProject.Application.Features.Queries.Adverts.GetByIdAdvert
 {
-    public class GetByIdAdvertQueryHandler : IRequestHandler<GetByIdAdvertQueryRequest, GetByIdAdvertQueryResponse>
+    public class GetByMyAdvertQueryHandler : IRequestHandler<GetByMyAdvertQueryRequest, GetByMyAdvertQueryResponse>
     {
         private readonly IAdvertReadRepository _advertReadRepository;
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
 
-        public GetByIdAdvertQueryHandler(IAdvertReadRepository advertReadRepository, IMapper mapper, UserManager<AppUser> userManager)
+        public GetByMyAdvertQueryHandler(IAdvertReadRepository advertReadRepository, IMapper mapper, UserManager<AppUser> userManager)
         {
             _advertReadRepository = advertReadRepository;
             _mapper = mapper;
             _userManager = userManager;
         }
 
-        public async Task<GetByIdAdvertQueryResponse> Handle(GetByIdAdvertQueryRequest request, CancellationToken cancellationToken)
+        public async Task<GetByMyAdvertQueryResponse> Handle(GetByMyAdvertQueryRequest request, CancellationToken cancellationToken)
         {
             AppUser user = await _userManager.FindByEmailAsync(request.UserNameOrEmail);
             if (user == null)
@@ -46,7 +46,7 @@ namespace LawyerProject.Application.Features.Queries.Adverts.GetByIdAdvert
             && a.DataState == Domain.Enums.DataState.Active).ToList();
             IEnumerable<GetAdvertDto> getAdvertDto = _mapper.Map<IEnumerable<Advert>, IEnumerable<GetAdvertDto>>(advert);
 
-            return new GetByIdAdvertQueryResponse
+            return new GetByMyAdvertQueryResponse
             {
                 Advert = getAdvertDto,
             };

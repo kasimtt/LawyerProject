@@ -60,7 +60,7 @@ namespace LawyerProject.API.Controllers
             GetAllAdvertQueryResponse response = await mediator.Send(new GetAllAdvertQueryRequest { Pagination = pagination });
             return Ok(response);
         }
-        [HttpGet("[action]/{UserNameOrEmail}")] 
+        
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllWithOutTotalCount([FromQuery] Pagination pagination)
@@ -72,10 +72,10 @@ namespace LawyerProject.API.Controllers
 
 
 
-        [HttpGet("[action]/{Id}")] 
-        public async Task<IActionResult> GetById([FromRoute] GetByIdAdvertQueryRequest request)
+        [HttpGet("[action]/{UserNameOrEmail}")]
+        public async Task<IActionResult> GetByMyAdvert([FromRoute] GetByMyAdvertQueryRequest request)
         {
-            GetByIdAdvertQueryResponse response = await mediator.Send(request);
+            GetByMyAdvertQueryResponse response = await mediator.Send(request);
 
             return Ok(response.Advert); 
         }
