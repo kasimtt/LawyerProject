@@ -7,6 +7,7 @@ using LawyerProject.Domain.Entities;
 using LawyerProject.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,15 +20,18 @@ namespace LawyerProject.Application.Features.Queries.Adverts.GetAllAdvert
     {
         private readonly IAdvertReadRepository _advertReadRepository;
         private readonly IMapper _mapper;
+        readonly ILogger<GetAllAdvertQueryHandler> _logger;
 
-        public GetAllAdvertQueryHandler(IAdvertReadRepository advertReadRepository, IMapper mapper)
+        public GetAllAdvertQueryHandler(IAdvertReadRepository advertReadRepository, IMapper mapper, ILogger<GetAllAdvertQueryHandler> logger)
         {
             _advertReadRepository = advertReadRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<GetAllAdvertQueryResponse> Handle(GetAllAdvertQueryRequest request, CancellationToken cancellationToken)
         {
+            _logger.LogInformation("Bütün ürünler listelendi");
             int totalCount = _advertReadRepository.GetAll(false).Count();
             var result = _advertReadRepository.Table.Include(i => i.User).Skip(request.Pagination.Page * request.Pagination.Size).Take(request.Pagination.Size).Where(c => c.DataState == DataState.Active).ToList();
 
