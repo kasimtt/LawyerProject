@@ -31,7 +31,7 @@ namespace LawyerProject.Application.Features.Queries.Adverts.GetAllAdvert
 
         public async Task<GetAllAdvertQueryResponse> Handle(GetAllAdvertQueryRequest request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Bütün ürünler listelendi");
+            _logger.LogInformation("Bütün ilanlar listelendi");
             int totalCount = _advertReadRepository.GetAll(false).Count();
             var result = _advertReadRepository.Table.Include(i => i.User).Skip(request.Pagination.Page * request.Pagination.Size).Take(request.Pagination.Size).Where(c => c.DataState == DataState.Active).ToList();
 
