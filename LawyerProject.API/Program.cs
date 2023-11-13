@@ -29,6 +29,7 @@ using LawyerProject.API.Configurations.ColumnWriters;
 using Serilog.Core;
 using Microsoft.AspNetCore.HttpLogging;
 using Serilog.Context;
+using LawyerProject.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -63,6 +64,7 @@ builder.Services.AddControllers(opt =>
     });
 #endregion
 
+#region Logging
 SqlColumn sqlColumn = new SqlColumn();
 sqlColumn.ColumnName = "UserName";
 sqlColumn.DataType = System.Data.SqlDbType.NVarChar;
@@ -94,8 +96,6 @@ Logger log = new LoggerConfiguration()
     .MinimumLevel.Information()
     .CreateLogger();
 builder.Host.UseSerilog(log);
-
-
 builder.Services.AddHttpLogging(logging =>
 {
     logging.LoggingFields = HttpLoggingFields.All;
@@ -105,6 +105,8 @@ builder.Services.AddHttpLogging(logging =>
     logging.ResponseBodyLogLimit = 4096;
 
 });
+#endregion
+
 
 #region Api Versioning & Api Explorer
 // IServiceCollection arabirimine ApiVersioning hizmetini ekler. 
@@ -173,7 +175,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // IServiceCollection arabirimine CORS (Cross-Origin Resource Sharing) hizmetini ekler. CORS, web uygulamalarýnýn farklý kaynaklardan gelen isteklere izin vermesini saðlayan bir mekanizmadýr.
 // CORS hizmetini eklemek, Web API'nin farklý etki alanlarýndan gelen istekleri kabul etmesini ve gerekirse yanýtlara uygun CORS baþlýklarýný eklemesini saðlar. Bu þekilde, Web API'ye dýþ kaynaklardan eriþim saðlanabilir.
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
-policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()
+policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials()
 ));
 
 
@@ -204,6 +206,7 @@ builder.Services.AddContainerWithDependenciesPersistence();
 builder.Services.AddContainerWithDependenciesInfrastucture();
 //builder.Services.AddStorage<LocalStorage>();  // istediðimiz storage burada aktif edebiliriz 
 builder.Services.AddStorage<AzureStorage>();
+builder.Services.AddSignalRServices();
 
 builder.Services.AddAutoMapper(typeof(CasesProfile)); //ilgili assemblydeki herhangi bir sýnýfý girmemiz yeterli olcaktýr
 
@@ -251,5 +254,7 @@ app.Use(async (LawyerProjectContext, next) =>
 });
 
 app.MapControllers();
+
+app.MapHubs();
 
 app.Run();

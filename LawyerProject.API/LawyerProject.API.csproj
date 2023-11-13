@@ -29,6 +29,7 @@
 	  <ProjectReference Include="..\LawyerProject.AspNetCore\LawyerProject.AspNetCore.csproj" />
 	  <ProjectReference Include="..\LawyerProject.Infrastructure\LawyerProject.Infrastructure.csproj" />
 	  <ProjectReference Include="..\LawyerProject.Persistence\LawyerProject.Persistence.csproj" />
+	  <ProjectReference Include="..\LawyerProject.SignalR\LawyerProject.SignalR.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="wwwroot\" />
