@@ -19,6 +19,7 @@ namespace LawyerProject.Domain.Entities
         public string Address { get; set; }
         public string District { get; set; }
         public string CasePlace { get; set; }
+        public string Description { get; set; }
 
 
 
