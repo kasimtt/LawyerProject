@@ -35,7 +35,7 @@ namespace LawyerProject.Application.Features.Commands.CasePdfFiles.UploadCasePdf
                 throw new NotFoundCaseException();
             }
 
-            List<(string fileName, string pathOrContainer)> datas = await _storageService.UploadAsync("cases-image", request.FormFiles);
+            List<(string fileName, string pathOrContainer)> datas = await _storageService.UploadAsync("cases-file", request.FormFiles);
             await _casePdfFileWriteRepository.AddRangeAsync(datas.Select(r => new CasePdfFile
             {
                 FileName = r.fileName,

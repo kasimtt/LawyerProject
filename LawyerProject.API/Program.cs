@@ -204,8 +204,8 @@ builder.Services.AddIdentity<AppUser, AppRole>(opt =>  // test ortamýnda olduðu 
 builder.Services.AddContainerWithDependenciesApplication();
 builder.Services.AddContainerWithDependenciesPersistence();
 builder.Services.AddContainerWithDependenciesInfrastucture();
-//builder.Services.AddStorage<LocalStorage>();  // istediðimiz storage burada aktif edebiliriz 
-builder.Services.AddStorage<AzureStorage>();
+builder.Services.AddStorage<LocalStorage>();  // istediðimiz storage burada aktif edebiliriz 
+//builder.Services.AddStorage<AzureStorage>();
 builder.Services.AddSignalRServices();
 
 builder.Services.AddAutoMapper(typeof(CasesProfile)); //ilgili assemblydeki herhangi bir sýnýfý girmemiz yeterli olcaktýr
