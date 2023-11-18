@@ -33,6 +33,7 @@ namespace LawyerProject.Application.Features.Commands.Adverts.UpdateAdvert
 
             Advert advert = _mapper.Map<Advert>(request); // bi ara create'yi değişmeyen kodları yaz
             advert.CreatedDate = TempAdvert.CreatedDate;
+            advert.IdUserFK = TempAdvert.IdUserFK;
             bool result = _advertWriteRepository.Update(advert);
 
             if (result)
@@ -40,14 +41,7 @@ namespace LawyerProject.Application.Features.Commands.Adverts.UpdateAdvert
                 await _advertWriteRepository.SaveAsync();
             }
 
-            return new UpdateAdvertCommandResponse
-            {
-                Success = result,
-            };
-
-
-
-
+            return new();
         }
     }
 }

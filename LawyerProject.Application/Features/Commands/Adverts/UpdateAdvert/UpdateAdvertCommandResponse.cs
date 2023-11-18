@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 namespace LawyerProject.Application.Features.Commands.Adverts.UpdateAdvert
 {
     public class UpdateAdvertCommandResponse
-    {
-        public bool Success { get; set; }   
+    { 
     }
 }

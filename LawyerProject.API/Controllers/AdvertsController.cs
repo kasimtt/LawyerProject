@@ -23,8 +23,8 @@ namespace LawyerProject.API.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateAdvert([FromBody] CreateAdvertCommandRequest request)
         {
-            CreateAdvertCommandResponse  response =  await mediator.Send(request);
-            if(response.Success)
+            CreateAdvertCommandResponse response = await mediator.Send(request);
+            if (response.Success)
             {
                 return Ok();
             }
@@ -35,22 +35,18 @@ namespace LawyerProject.API.Controllers
         public async Task<IActionResult> UpdateAdvert([FromBody] UpdateAdvertCommandRequest request)
         {
             UpdateAdvertCommandResponse response = await mediator.Send(request);
-            if(response.Success)
+            return Ok();
+        }
+
+        [HttpPut("[action]/{Id}")]
+        public async Task<IActionResult> DeleteAdvert([FromRoute] DeleteAdvertCommandRequest request)
+        {
+            DeleteAdvertCommandResponse response = await mediator.Send(request);
+            if (response.Success)
             {
                 return Ok();
             }
             return BadRequest();
-        }
-        
-        [HttpPut("[action]/{Id}")]
-        public async Task<IActionResult> DeleteAdvert([FromRoute] DeleteAdvertCommandRequest request)
-        {
-           DeleteAdvertCommandResponse response = await mediator.Send(request);
-            if(response.Success)
-            {
-               return Ok();
-            }
-           return BadRequest();
 
         }
 
@@ -60,7 +56,6 @@ namespace LawyerProject.API.Controllers
             GetAllAdvertQueryResponse response = await mediator.Send(new GetAllAdvertQueryRequest { Pagination = pagination });
             return Ok(response);
         }
-        
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllWithOutTotalCount([FromQuery] Pagination pagination)
@@ -69,15 +64,12 @@ namespace LawyerProject.API.Controllers
             return Ok(response.Adverts);
         }
 
-
-
-
         [HttpGet("[action]/{UserNameOrEmail}")]
         public async Task<IActionResult> GetByMyAdvert([FromRoute] GetByMyAdvertQueryRequest request)
         {
             GetByMyAdvertQueryResponse response = await mediator.Send(request);
 
-            return Ok(response.Advert); 
+            return Ok(response.Advert);
         }
 
 
