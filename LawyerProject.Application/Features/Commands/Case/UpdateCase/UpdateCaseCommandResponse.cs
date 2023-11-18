@@ -8,6 +8,5 @@ namespace LawyerProject.Application.Features.Commands.Case.UpdateCase
 {
     public class UpdateCaseCommandResponse
     {
-       public bool success { get; set; }
     }
 }

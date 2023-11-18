@@ -27,7 +27,7 @@ namespace LawyerProject.API.Controllers
 {   
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes ="Admin")]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public class CasesController : ControllerBase
     {
 
@@ -63,12 +63,9 @@ namespace LawyerProject.API.Controllers
         [HttpPut("Update")]
         public async Task<IActionResult> Put([FromBody] UpdateCaseCommandRequest updateCaseCommandRequest)
         {
-
             UpdateCaseCommandResponse updateCaseCommandResponse = await _mediator.Send(updateCaseCommandRequest);
-            if (updateCaseCommandResponse.success)
-                return Ok();
-            else
-                return BadRequest();
+            return Ok();
+            
         }
 
         [HttpPost("[action]/{id}")]

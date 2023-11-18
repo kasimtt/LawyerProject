@@ -11,7 +11,7 @@ namespace LawyerProject.Application.DTOs.CasesDtos
     public class UpdateCaseDto : BaseUpdateDto
     {
 
-        public int IdUserFK { get; set; }
+        public int ObjectId { get; set; }
         public int CaseNumber { get; set; }
         public string CaseNot { get; set; } = string.Empty;
         public string CaseDescription { get; set; } = string.Empty;
