@@ -14,7 +14,7 @@ namespace LawyerProject.Persistence.EntityConfiguration
         public void Configure(EntityTypeBuilder<Advert> builder)
         {
             builder.HasKey(a => a.ObjectId);
-            builder.Property(a => a.CaseType).IsRequired();
+            builder.Property(a => a.CaseType).HasMaxLength(60).IsRequired();
             builder.Property(a=>a.CaseDate).IsRequired();
             builder.Property(a=>a.Price).IsRequired();
             builder.Property(a=>a.City).IsRequired()

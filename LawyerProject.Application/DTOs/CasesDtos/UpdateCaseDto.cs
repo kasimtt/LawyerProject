@@ -15,7 +15,7 @@ namespace LawyerProject.Application.DTOs.CasesDtos
         public int CaseNumber { get; set; }
         public string CaseNot { get; set; } = string.Empty;
         public string CaseDescription { get; set; } = string.Empty;
-        public CaseType CaseType { get; set; }
+        public string CaseType { get; set; } = string.Empty;
         public DateTime? CaseDate { get; set; }
 
     }

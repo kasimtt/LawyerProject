@@ -11,7 +11,7 @@ namespace LawyerProject.Application.Features.Commands.Adverts.UpdateAdvert
     public class UpdateAdvertCommandRequest: IRequest<UpdateAdvertCommandResponse>
     {
         public int ObjectId { get; set; }
-        public CaseType CaseType { get; set; }
+        public string CaseType { get; set; } = string.Empty;
         public DateTime CaseDate { get; set; }
         public decimal Price { get; set; }
         public string City { get; set; }

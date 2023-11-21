@@ -20,7 +20,7 @@ namespace LawyerProject.Persistence.EntityConfiguration
                 .HasMaxLength(200);
             builder.Property(c=>c.CaseDescription).IsRequired(false)
                 .HasMaxLength(1000);
-            builder.Property(c=>c.CaseType).IsRequired();
+            builder.Property(c=>c.CaseType).HasMaxLength(60).IsRequired();
             builder.Property(c => c.CaseDate).IsRequired(false);
 
             builder.Property(a => a.CreatedDate).IsRequired();
