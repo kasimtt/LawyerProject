@@ -65,5 +65,22 @@ namespace LawyerProject.Persistence.Services
             else
                 throw new NotFoundUserException();
         }
+
+        public async Task<GetUserDto> GetUserByUserNameAsync(string userNameOrEmail)
+        {
+           AppUser User =  await _userManager.FindByNameAsync(userNameOrEmail);
+            if(User == null)
+                User = await _userManager.FindByEmailAsync(userNameOrEmail);
+            if( User == null )
+                throw new NotFoundUserException();
+
+            GetUserDto dto = _mapper.Map<GetUserDto>(User);
+
+            return dto;
+
+
+
+        }
+
     }
 }

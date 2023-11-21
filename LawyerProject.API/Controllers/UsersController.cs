@@ -1,6 +1,7 @@
 ﻿using LawyerProject.Application.Features.Commands.AppUsers.CreateUser;
 using LawyerProject.Application.Features.Commands.AppUsers.GoogleLogin;
 using LawyerProject.Application.Features.Commands.AppUsers.LoginUser;
+using LawyerProject.Application.Features.Queries.AppUser.GetUserByUserName;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,8 +26,14 @@ namespace LawyerProject.API.Controllers
             return Ok(response);
           
         }
+        [HttpGet("[action]/{UserNameOrEmail}")]
+        public async Task<IActionResult> GetUserByUserName([FromRoute] GetUserByUserNameQueryRequest request)
+        {
+            GetUserByUserNameQueryResponse response = await _mediator.Send(request);
+            return Ok(response);
+        }
 
-     
+        
 
     }
 }
