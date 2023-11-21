@@ -3,7 +3,6 @@ using LawyerProject.Application.DTOs.CasesDtos;
 using LawyerProject.Application.Features.Queries.Cases.GetByUserIdCase;
 using LawyerProject.Application.Repositories.CaseRepositories;
 using LawyerProject.Domain.Entities;
-using LawyerProject.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using A = LawyerProject.Domain.Entities.Identity;
 
 namespace LawyerProject.Application.Features.Queries.Cases.GetByUserIdCase
 {
@@ -19,9 +19,9 @@ namespace LawyerProject.Application.Features.Queries.Cases.GetByUserIdCase
     {
         private readonly ICaseReadRepository _caseReadRepository;
         private readonly IMapper _mapper;
-        private readonly UserManager<AppUser> _userManager;
+        private readonly UserManager<A.AppUser> _userManager;
 
-        public GetByUserIdCaseQueryHandler(ICaseReadRepository caseReadRepository, IMapper mapper, UserManager<AppUser> userManager)
+        public GetByUserIdCaseQueryHandler(ICaseReadRepository caseReadRepository, IMapper mapper, UserManager<A.AppUser> userManager)
         {
             _caseReadRepository = caseReadRepository;
             _mapper = mapper;
@@ -30,7 +30,7 @@ namespace LawyerProject.Application.Features.Queries.Cases.GetByUserIdCase
 
         public async Task<GetByUserIdCaseQueryResponse> Handle(GetByUserIdCaseQueryRequest request, CancellationToken cancellationToken)
         {
-            AppUser user = await _userManager.FindByEmailAsync(request.UserNameOrEmail);
+            A.AppUser user = await _userManager.FindByEmailAsync(request.UserNameOrEmail);
             if (user == null)
             {
                 user = await _userManager.FindByNameAsync(request.UserNameOrEmail);

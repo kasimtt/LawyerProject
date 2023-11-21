@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using A =  LawyerProject.Domain.Entities.Identity;
 
 namespace LawyerProject.Application.Features.Queries.Adverts.GetByIdAdvert
 {
@@ -20,9 +21,9 @@ namespace LawyerProject.Application.Features.Queries.Adverts.GetByIdAdvert
     {
         private readonly IAdvertReadRepository _advertReadRepository;
         private readonly IMapper _mapper;
-        private readonly UserManager<AppUser> _userManager;
+        private readonly UserManager<A.AppUser> _userManager;
 
-        public GetByMyAdvertQueryHandler(IAdvertReadRepository advertReadRepository, IMapper mapper, UserManager<AppUser> userManager)
+        public GetByMyAdvertQueryHandler(IAdvertReadRepository advertReadRepository, IMapper mapper, UserManager<A.AppUser> userManager)
         {
             _advertReadRepository = advertReadRepository;
             _mapper = mapper;
@@ -31,7 +32,7 @@ namespace LawyerProject.Application.Features.Queries.Adverts.GetByIdAdvert
 
         public async Task<GetByMyAdvertQueryResponse> Handle(GetByMyAdvertQueryRequest request, CancellationToken cancellationToken)
         {
-            AppUser user = await _userManager.FindByEmailAsync(request.UserNameOrEmail);
+            A.AppUser user = await _userManager.FindByEmailAsync(request.UserNameOrEmail);
             if (user == null)
             {
                 user = await _userManager.FindByNameAsync(request.UserNameOrEmail);

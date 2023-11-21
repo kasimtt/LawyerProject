@@ -36,10 +36,8 @@ namespace LawyerProject.Application.Features.Commands.AppUsers.CreateUser
                 Message = createUserResponseDto.Message
             };
               
-
-
-
-
         }
+
+       
     }
 }
