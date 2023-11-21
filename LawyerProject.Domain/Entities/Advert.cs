@@ -12,7 +12,7 @@ namespace LawyerProject.Domain.Entities
     {
         public string IdUserFK { get; set; }
         public AppUser? User { get; set; }
-        public CaseType CaseType { get; set; }
+        public string CaseType { get; set; } = string.Empty;
         public DateTime CaseDate { get; set; }
         public decimal Price { get; set; }
         public string City { get; set; }
