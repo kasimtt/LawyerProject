@@ -6,6 +6,7 @@ using LawyerProject.Application.Abstractions.Token;
 using LawyerProject.Application.DTOs.TokenDtos;
 using LawyerProject.Application.Exceptions;
 using LawyerProject.Application.Features.Commands.AppUsers.LoginUser;
+using LawyerProject.Application.Helpers;
 using LawyerProject.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -22,21 +23,21 @@ namespace LawyerProject.Persistence.Services
 {
     public class AuthService : IAuthService
     {
-
-
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenHandler _tokenHandler;
         private readonly IConfiguration _configuration;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IUserService _userService;
+        private readonly IMailService _mailService;
 
-        public AuthService(UserManager<AppUser> userManager, ITokenHandler tokenHandler, IConfiguration configuration, SignInManager<AppUser> signInManager, IUserService userService)
+        public AuthService(UserManager<AppUser> userManager, ITokenHandler tokenHandler, IConfiguration configuration, SignInManager<AppUser> signInManager, IUserService userService, IMailService mailService)
         {
             _userManager = userManager;
             _tokenHandler = tokenHandler;
             _configuration = configuration;
             _signInManager = signInManager;
             _userService = userService;
+            _mailService = mailService;
         }
 
 
@@ -122,6 +123,32 @@ namespace LawyerProject.Persistence.Services
             else
                 throw new NotFoundUserException();
 
+        }
+
+        public async Task PasswordResetAsync(string email)
+        {
+            AppUser user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+                //byte[] tokenBytes = Encoding.UTF8.GetBytes(resetToken);
+                //resetToken = WebEncoders.Base64UrlEncode(tokenBytes);
+                resetToken = resetToken.UrlEncode();
+                await _mailService.SendPasswordResetMailAsync(email, user.Id, resetToken);
+            }
+        }
+
+        public async Task<bool> VerifyResetTokenAsync(string resetToken, string userId)
+        {
+            AppUser user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                //byte[] tokenBytes = WebEncoders.Base64UrlDecode(resetToken);
+                //resetToken = Encoding.UTF8.GetString(tokenBytes);
+                resetToken = resetToken.UrlDecode();
+                return await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", resetToken);
+            }
+            return false;
         }
     }
 }

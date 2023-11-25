@@ -1,6 +1,8 @@
 ﻿using LawyerProject.Application.Features.Commands.AppUsers.GoogleLogin;
 using LawyerProject.Application.Features.Commands.AppUsers.LoginUser;
+using LawyerProject.Application.Features.Commands.AppUsers.PasswordReset;
 using LawyerProject.Application.Features.Commands.AppUsers.RefreshTokenLogin;
+using LawyerProject.Application.Features.Commands.AppUsers.VerifyResetToken;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,14 +35,25 @@ namespace LawyerProject.API.Controllers
             return Ok(response);
         }
 
-
-
         [HttpPost("google-login")]
         public async Task<IActionResult> GoogleLogin(GoogleLoginCommandRequest request) //test icin clientten arayuz yapılmasını beklicez
         {
             GoogleLoginCommandResponse response = await _mediator.Send(request);
             return Ok(response);
+        }
 
+        [HttpPost("password-reset")]
+        public async Task<IActionResult> PasswordReset([FromBody] PasswordResetCommandRequest request)
+        {
+            PasswordResetCommandResponse response = await _mediator.Send(request);
+            return Ok();
+        }
+
+        [HttpPost("verify-reset-token")]
+        public async Task<IActionResult> VerifyResetToken([FromBody] VerifyResetTokenCommandRequest request)
+        {
+            VerifyResetTokenCommandResponse response = await _mediator.Send(request);
+            return Ok(response);
         }
     }
 }

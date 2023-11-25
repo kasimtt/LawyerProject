@@ -19,12 +19,12 @@ namespace LawyerProject.Infrastructure.Services
             _configuration = configuration;
         }
 
-        public async Task SendMessageAsync(string to, string subject, string body, bool isBodyHtml = true)
+        public async Task SendMailAsync(string to, string subject, string body, bool isBodyHtml = true)
         {
-            await SendMessageAsync(new[] { to }, subject, body);
+            await SendMailAsync(new[] { to }, subject, body);
         }
 
-        public async Task SendMessageAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
+        public async Task SendMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
         {
             MailMessage mail = new();
             mail.IsBodyHtml = isBodyHtml;
@@ -45,6 +45,22 @@ namespace LawyerProject.Infrastructure.Services
 
             //Mail Servis kullanımı
             //await _mailService.SendMessageAsync("alparslanaydgn02@gmail.com", "Örnek Mail", "<strong>Bu bir örnek maildir.</strong>");
+        }
+
+        public async Task SendPasswordResetMailAsync(string to, string userId, string resetToken)
+        {
+            StringBuilder mail = new();
+
+            mail.AppendLine("Merhaba<br>Eğer yeni şifre talebinde bulunduysanız aşağıdaki linkten şifrenizi yenileyebilirsiniz." +
+                "<br><strong><a target=\"_blank\" href=\"");
+
+            string str = _configuration["AngularClientUrl"] + "/update-password/" + userId + "/" + resetToken;
+            mail.AppendLine(str);
+            mail.AppendLine("\">Yeni şifre talebi için tıklayınız...</a></strong><br><br><span style=\"font-size:12px;\">Not: " +
+                "Eğer ki bu talebi siz gerçekleştirmediyseniz lütfen maili dikkate almayınız.</span><br>Saygılarımızla...<br><br>" +
+                "<br>Avukatım Cepte");
+
+            await SendMailAsync(to, "Şifre Yenileme Talebi", mail.ToString(), true);
         }
     }
 }
