@@ -13,5 +13,6 @@ namespace LawyerProject.Application.Abstractions.Services
         Task<CreateUserResponseDto> CreateAsync(CreateUserDto createUserDto );
         Task UpdateRefreshTokenAsync(string refreshToken, AppUser user, DateTime accessTokenDate,int addOnAccessTokenDate);
         Task<GetUserDto> GetUserByUserNameAsync(string userNameOrEmail);
+        Task UpdatePasswordAsync(string userId, string resetToken, string newPassword);
     }
 }

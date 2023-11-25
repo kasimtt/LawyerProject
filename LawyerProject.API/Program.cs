@@ -30,6 +30,7 @@ using Serilog.Core;
 using Microsoft.AspNetCore.HttpLogging;
 using Serilog.Context;
 using LawyerProject.SignalR;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -197,7 +198,7 @@ builder.Services.AddIdentity<AppUser, AppRole>(opt =>  // test ortamýnda olduðu 
     opt.Password.RequireDigit = false;
     opt.Password.RequireLowercase = false;
     opt.Password.RequireUppercase = false;
-}).AddEntityFrameworkStores<LawyerProjectContext>(); // identity iþlemlerine dair tüm storage iþlemleri burada bulunur
+}).AddEntityFrameworkStores<LawyerProjectContext>().AddDefaultTokenProviders(); // identity iþlemlerine dair tüm storage iþlemleri burada bulunur
 
 #endregion   
 

@@ -3,6 +3,7 @@ using LawyerProject.Application.Abstractions.Services;
 using LawyerProject.Application.DTOs.UserDtos;
 using LawyerProject.Application.Exceptions;
 using LawyerProject.Application.Features.Commands.AppUsers.CreateUser;
+using LawyerProject.Application.Helpers;
 using LawyerProject.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -32,11 +33,11 @@ namespace LawyerProject.Persistence.Services
 
 
 
-            IdentityResult result = await _userManager.CreateAsync(appUser, createUserDto.Password); 
+            IdentityResult result = await _userManager.CreateAsync(appUser, createUserDto.Password);
 
-           CreateUserResponseDto dto = new CreateUserResponseDto();
+            CreateUserResponseDto dto = new CreateUserResponseDto();
             dto.Success = result.Succeeded;
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 dto.Message = "başarıyla kayıt yapılmıştır";
             }
@@ -53,9 +54,9 @@ namespace LawyerProject.Persistence.Services
 
         }
 
-        public async Task UpdateRefreshTokenAsync(string refreshToken,AppUser user, DateTime accessTokenDate, int addOnAccessTokenDate)
+        public async Task UpdateRefreshTokenAsync(string refreshToken, AppUser user, DateTime accessTokenDate, int addOnAccessTokenDate)
         {
-           
+
             if (user != null)
             {
                 user.RefreshToken = refreshToken;
@@ -68,10 +69,10 @@ namespace LawyerProject.Persistence.Services
 
         public async Task<GetUserDto> GetUserByUserNameAsync(string userNameOrEmail)
         {
-           AppUser User =  await _userManager.FindByNameAsync(userNameOrEmail);
-            if(User == null)
+            AppUser User = await _userManager.FindByNameAsync(userNameOrEmail);
+            if (User == null)
                 User = await _userManager.FindByEmailAsync(userNameOrEmail);
-            if( User == null )
+            if (User == null)
                 throw new NotFoundUserException();
 
             GetUserDto dto = _mapper.Map<GetUserDto>(User);
@@ -82,5 +83,18 @@ namespace LawyerProject.Persistence.Services
 
         }
 
+        public async Task UpdatePasswordAsync(string userId, string resetToken, string newPassword)
+        {
+            AppUser user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                resetToken = resetToken.UrlDecode();
+                IdentityResult result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
+                if (result.Succeeded)
+                    await _userManager.UpdateSecurityStampAsync(user);
+                else
+                    throw new PasswordChangeFailedException();
+            }
+        }
     }
 }
