@@ -3,6 +3,7 @@ using LawyerProject.Application.Features.Commands.AppUsers.GoogleLogin;
 using LawyerProject.Application.Features.Commands.AppUsers.LoginUser;
 using LawyerProject.Application.Features.Commands.AppUsers.PasswordUpdate;
 using LawyerProject.Application.Features.Queries.AppUser.GetUserByUserName;
+using LawyerProject.Application.Features.Queries.AppUser.GetUserForProfile;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -42,5 +43,15 @@ namespace LawyerProject.API.Controllers
             PasswordUpdateCommandResponse response = await _mediator.Send(request);
             return Ok();
         }
+
+        [HttpGet("[action]/{UserNameOrEmail}")]
+        public async Task<IActionResult> GetUserDetailsByUserName([FromRoute] GetUserDetailsByUserEmailQueryRequest request)
+        {
+            GetUserDetailsByUserEmailQueryResponse response = await _mediator.Send(request);
+            return Ok(response.User);
+        }
+
+
+
     }
 }

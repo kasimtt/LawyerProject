@@ -19,6 +19,7 @@ namespace LawyerProject.Application.Mappers
             CreateMap<Advert, CreateAdvertCommandRequest>().ReverseMap();
             CreateMap<Advert, UpdateAdvertCommandRequest>().ReverseMap();
             CreateMap<Advert, GetAdvertDto>().ReverseMap();
+            CreateMap<Advert, GetAdvertDtoWithoutUser>().ReverseMap();
         
         }
     }

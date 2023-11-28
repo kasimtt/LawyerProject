@@ -23,6 +23,7 @@ namespace LawyerProject.Application.Mappers
             CreateMap<CreateUserDto,AppUser>().ReverseMap();
             CreateMap<AppUser,GetUserDto>().ReverseMap();
             CreateMap<GetUserDto,GetUserByUserNameQueryResponse>().ReverseMap();
+            CreateMap<GetUserDetailsDto,AppUser>().ReverseMap();
             
             // İki yönlü eşleme için ReverseMap() kullanmayı unutmayın
           

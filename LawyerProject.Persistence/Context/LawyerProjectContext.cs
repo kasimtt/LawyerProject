@@ -25,6 +25,15 @@ namespace LawyerProject.Persistence.Context
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;  //introducing hatası için yazıldı
             }
             //configurasyonlar buraya eklenecek
+            modelBuilder.Entity<AppUser>()
+              .HasMany(u => u.Adverts)
+              .WithOne(a => a.User)
+            .HasForeignKey(a => a.IdUserFK);
+
+            modelBuilder.Entity<AppUser>()
+                .HasMany(u => u.Cases)
+                .WithOne(a => a.User)
+                .HasForeignKey(a => a.IdUserFK);
 
             modelBuilder.ApplyConfiguration(new AdvertConfiguration());
             modelBuilder.ApplyConfiguration(new CaseConfiguration());

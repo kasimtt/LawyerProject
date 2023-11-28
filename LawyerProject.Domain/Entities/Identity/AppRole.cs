@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace LawyerProject.Domain.Entities.Identity
 {
+    
     public class AppRole : IdentityRole<string>
     {  
 

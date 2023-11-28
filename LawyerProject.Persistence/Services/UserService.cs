@@ -1,12 +1,20 @@
 ﻿using AutoMapper;
 using LawyerProject.Application.Abstractions.Services;
+using LawyerProject.Application.DTOs.AdvertsDtos;
+using LawyerProject.Application.DTOs.CasesDtos;
 using LawyerProject.Application.DTOs.UserDtos;
 using LawyerProject.Application.Exceptions;
 using LawyerProject.Application.Features.Commands.AppUsers.CreateUser;
 using LawyerProject.Application.Helpers;
+using LawyerProject.Application.Repositories.AdvertRepositories;
+using LawyerProject.Application.Repositories.CaseRepositories;
+using LawyerProject.Domain.Entities;
 using LawyerProject.Domain.Entities.Identity;
+using LawyerProject.Persistence.Context;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +27,15 @@ namespace LawyerProject.Persistence.Services
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
+        private readonly ICaseReadRepository _caseReadRepository;
+        private readonly IAdvertReadRepository _advertRepository;
 
-        public UserService(UserManager<AppUser> userManager, IMapper mapper)
+        public UserService(UserManager<AppUser> userManager, IMapper mapper, LawyerProjectContext context, ICaseReadRepository caseReadRepository, IAdvertReadRepository advertRepository)
         {
             _userManager = userManager;
             _mapper = mapper;
+            _caseReadRepository = caseReadRepository;
+            _advertRepository = advertRepository;
         }
 
         public async Task<CreateUserResponseDto> CreateAsync(CreateUserDto createUserDto)
@@ -95,6 +107,33 @@ namespace LawyerProject.Persistence.Services
                 else
                     throw new PasswordChangeFailedException();
             }
+        }
+
+        public async Task<GetUserDetailsDto> GetUserDetailsAsync(string userNameOrEmail)
+        {
+            
+           
+
+            AppUser User = await _userManager.FindByNameAsync(userNameOrEmail);
+            if (User == null)
+                User = await _userManager.FindByEmailAsync(userNameOrEmail);
+            if (User == null)
+                throw new NotFoundUserException();
+
+            IEnumerable<Case> _cases = _caseReadRepository.GetWhere(c => c.IdUserFK == User.Id).ToList();
+            IEnumerable<Advert> _adverts = _advertRepository.GetWhere(c=>c.IdUserFK == User.Id).ToList();
+
+            IEnumerable<GetAdvertDtoWithoutUser> advertDto = _mapper.Map<IEnumerable<Advert>, IEnumerable<GetAdvertDtoWithoutUser>>(_adverts).ToList();
+            IEnumerable<GetCaseDto> caseDto = _mapper.Map<IEnumerable<Case>, IEnumerable<GetCaseDto>>(_cases).ToList();
+
+
+
+
+            GetUserDetailsDto dto = _mapper.Map<GetUserDetailsDto>(User);
+            dto.Cases = caseDto;
+            dto.Adverties = advertDto;
+            
+            return dto;
         }
     }
 }
