@@ -2,6 +2,7 @@
 using LawyerProject.Application.Features.Commands.AppUsers.GoogleLogin;
 using LawyerProject.Application.Features.Commands.AppUsers.LoginUser;
 using LawyerProject.Application.Features.Commands.AppUsers.PasswordUpdate;
+using LawyerProject.Application.Features.Commands.AppUsers.UpdateUser;
 using LawyerProject.Application.Features.Queries.AppUser.GetUserByUserName;
 using LawyerProject.Application.Features.Queries.AppUser.GetUserForProfile;
 using MediatR;
@@ -51,7 +52,12 @@ namespace LawyerProject.API.Controllers
             return Ok(response.User);
         }
 
-
+        [HttpPost("[action]")]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommandRequest request)
+        {
+            UpdateUserCommandResponse response = await _mediator.Send(request);
+            return Ok();
+        }
 
     }
 }
