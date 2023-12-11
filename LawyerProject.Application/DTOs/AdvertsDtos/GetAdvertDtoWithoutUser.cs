@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LawyerProject.Application.DTOs.AdvertsDtos
 {
-    public class GetAdvertDtoWithoutUser
+    public class GetAdvertDtoWithoutUser: BaseGetDto
     {
         public int ObjectId { get; set; }
         public string CaseType { get; set; } = string.Empty;
