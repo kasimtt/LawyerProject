@@ -26,8 +26,13 @@ namespace LawyerProject.API.Controllers
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommadRequest request)
         {
             CreateUserCommandResponse response = await _mediator.Send(request);
+            if(response.Success)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
 
-            return Ok(response);
+            
 
         }
 
