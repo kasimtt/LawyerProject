@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using LawyerProject.Application.Abstractions.Storage;
+using LawyerProject.Application.Consts;
+using LawyerProject.Application.CustomAttributes;
 using LawyerProject.Application.DTOs.CasesDtos;
+using LawyerProject.Application.Enums;
 using LawyerProject.Application.Features.Commands.Case.DeleteCase;
 using LawyerProject.Application.Features.Commands.Case.UpdateCase;
 using LawyerProject.Application.Features.Commands.CasePdfFiles.RemoveCasePdfFile;
@@ -24,10 +27,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Collections.Immutable;
 
 namespace LawyerProject.API.Controllers
-{   
+{
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Admin")]
     public class CasesController : ControllerBase
     {
 
@@ -38,13 +40,16 @@ namespace LawyerProject.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("getall")]  //ileride lazım olması durumunda pagination işlemi eklenecek.
+        [HttpGet("getall")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Cases, ActionType = ActionType.Reading, Definition = "Getall Cases")]
         public async Task<IActionResult> Get([FromQuery] Pagination pagination)
         {
-            GetAllCaseQueryRequest request = new GetAllCaseQueryRequest { Pagination = pagination};
+            GetAllCaseQueryRequest request = new GetAllCaseQueryRequest { Pagination = pagination };
             GetAllCaseQueryResponse getAllCaseQueryResponse = await _mediator.Send(request);
             return Ok(getAllCaseQueryResponse);
         }
+
         [HttpGet("[action]/{Id}")]
         public async Task<IActionResult> GetById([FromRoute] GetByIdCaseQueryRequest getByIdCaseQueryRequest)
         {
@@ -54,7 +59,7 @@ namespace LawyerProject.API.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> Post([FromBody] CreateCaseCommandRequest CreateCaseCommandRequest) 
+        public async Task<IActionResult> Post([FromBody] CreateCaseCommandRequest CreateCaseCommandRequest)
         {
             await _mediator.Send(CreateCaseCommandRequest);
             return Ok();
@@ -65,7 +70,7 @@ namespace LawyerProject.API.Controllers
         {
             UpdateCaseCommandResponse updateCaseCommandResponse = await _mediator.Send(updateCaseCommandRequest);
             return Ok();
-            
+
         }
 
         [HttpPost("[action]/{id}")]
@@ -73,7 +78,7 @@ namespace LawyerProject.API.Controllers
         {
             UploadCasePdfFileCommandRequest uploadCasePdfFileCommandRequest = new UploadCasePdfFileCommandRequest
             {
-                FormFiles = Request.Form.Files,  
+                FormFiles = Request.Form.Files,
                 Id = id
             };
             await _mediator.Send(uploadCasePdfFileCommandRequest);
