@@ -23,16 +23,6 @@ namespace LawyerProject.Domain.Entities
 
 
 
-        /*-->ilanlar
-** DavaKonusu
-** DavaTarihi  -->cakişma bakilacak
-** DavaUcreti
-** şehir
-** ilçe
-** açık adres
-** duruşma yeri(7.sulh mahkemesi vs)
 
-
-*/
     }
 }

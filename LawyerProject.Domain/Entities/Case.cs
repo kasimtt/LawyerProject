@@ -14,8 +14,8 @@ namespace LawyerProject.Domain.Entities
         public string IdUserFK { get; set; }
         public AppUser? User { get; set; }
         public int CaseNumber { get; set; }
-        public string CaseNot { get; set; } = string.Empty;
-        public string CaseDescription { get; set; } = string.Empty;
+        public string? CaseNot { get; set; } 
+        public string? CaseDescription { get; set; } 
         public string CaseType { get; set; } = string.Empty;
         public DateTime? CaseDate { get; set; }
         public ICollection<CasePdfFile>? CasePdfFiles { get; set; }

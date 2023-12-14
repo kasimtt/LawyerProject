@@ -13,8 +13,8 @@ namespace LawyerProject.Application.Features.Commands.CreateCase
     {
         public string UserNameOrEmail { get; set; }
         public int CaseNumber { get; set; }
-        public string CaseNot { get; set; } = string.Empty;
-        public string CaseDescription { get; set; } = string.Empty;
+        public string? CaseNot { get; set; } 
+        public string? CaseDescription { get; set; } 
         public string CaseType { get; set; } = string.Empty;
         public DateTime? CaseDate { get; set; }
     }
