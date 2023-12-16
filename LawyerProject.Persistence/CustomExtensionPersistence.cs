@@ -44,6 +44,8 @@ namespace LawyerProject.Persistence
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IInternalAuthentication, AuthService>();
             services.AddScoped<IExternalAuthentication, AuthService>();
+
+            services.AddScoped<IRoleService, RoleService>();
         }
     }
 }
