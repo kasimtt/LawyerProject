@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace LawyerProject.Persistence.Context
 {
-    public class LawyerProjectContext : IdentityDbContext<AppUser,AppRole,string>
+    public class LawyerProjectContext : IdentityDbContext<AppUser, AppRole, string>
     {
         public LawyerProjectContext(DbContextOptions<LawyerProjectContext> options) : base(options)
         {
@@ -35,10 +35,16 @@ namespace LawyerProject.Persistence.Context
                 .WithOne(a => a.User)
                 .HasForeignKey(a => a.IdUserFK);
 
+            modelBuilder.Entity<AppRole>()
+                .HasMany(a => a.EndPoints)
+                .WithMany(a => a.Roles);
+
             modelBuilder.ApplyConfiguration(new AdvertConfiguration());
             modelBuilder.ApplyConfiguration(new CaseConfiguration());
             modelBuilder.ApplyConfiguration(new UserActivityConfiguration());
             modelBuilder.ApplyConfiguration(new FileConfiguration());
+            modelBuilder.ApplyConfiguration(new MenuConfiguration());
+            modelBuilder.ApplyConfiguration(new EndpointConfiguration());
 
 
 
@@ -53,8 +59,8 @@ namespace LawyerProject.Persistence.Context
 
             foreach (var data in datas)
             {
-               
-                switch(data.State)
+
+                switch (data.State)
                 {
                     case EntityState.Modified:
                         data.Entity.UpdatedDate = DateTime.UtcNow;
@@ -63,7 +69,7 @@ namespace LawyerProject.Persistence.Context
                         {
                             data.Entity.DataState = Domain.Enums.DataState.Active;
                         }
-                        
+
                         break;
                     case EntityState.Added:
                         data.Entity.CreatedDate = DateTime.UtcNow;
@@ -71,18 +77,20 @@ namespace LawyerProject.Persistence.Context
                         break;
                 }
             }
-              
+
             return await base.SaveChangesAsync(cancellationToken);
-        
+
         }
 
-        
+
         public DbSet<Advert> Adverts { get; set; }
         public DbSet<Case> Cases { get; set; }
-        public DbSet<UserActivity> UserActivitys { get; set; } 
+        public DbSet<UserActivity> UserActivitys { get; set; }
         public DbSet<Domain.Entities.File> Files { get; set; }
-        public DbSet<CasePdfFile> CasesPdfFiles { get; set;}
+        public DbSet<CasePdfFile> CasesPdfFiles { get; set; }
         public DbSet<UserImageFile> FilesImages { get; set; }
-       
+        public DbSet<Menu> Menus { get; set; }
+        public DbSet<Endpoint> Endpoints { get; set; }
+
     }
 }
