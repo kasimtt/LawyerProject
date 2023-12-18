@@ -34,7 +34,7 @@ namespace LawyerProject.Infrastructure.Services.Storage.Local
             List<(string fileName, string path)> datas = new();
             foreach (IFormFile file in files)
             {
-                string NewFileName = await FileRenameAsync(path, file.Name, HasFile);
+                string NewFileName = await FileRenameAsync(path, file.FileName, HasFile);
                 await CopyFileAsync($"{uploadPath}\\{NewFileName}", file);
                 datas.Add((NewFileName, $"{path}\\{NewFileName}"));
                
