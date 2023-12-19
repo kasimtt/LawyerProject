@@ -40,18 +40,25 @@ namespace LawyerProject.Persistence.Services
 
         public async Task<CreateUserResponseDto> CreateAsync(CreateUserDto createUserDto)
         {
+            CreateUserResponseDto dto = new CreateUserResponseDto();
+
+            if (await _userManager.FindByEmailAsync(createUserDto.Email) != null)
+            {
+                dto.Success = false;
+                dto.Message = "Bu E-Postaya sahip bir kullanıcı zaten var!";
+                return dto;
+            }
+
             AppUser appUser = _mapper.Map<AppUser>(createUserDto);
             appUser.Id = Guid.NewGuid().ToString();
 
 
-
             IdentityResult result = await _userManager.CreateAsync(appUser, createUserDto.Password);
 
-            CreateUserResponseDto dto = new CreateUserResponseDto();
             dto.Success = result.Succeeded;
             if (result.Succeeded)
             {
-                dto.Message = "başarıyla kayıt yapılmıştır";
+                dto.Message = "Başarıyla Kayıt Yapılmıştır";
             }
             else
                 foreach (var error in result.Errors)
@@ -60,10 +67,6 @@ namespace LawyerProject.Persistence.Services
                 }
 
             return dto;
-
-
-
-
         }
 
         public async Task UpdateRefreshTokenAsync(string refreshToken, AppUser user, DateTime accessTokenDate, int addOnAccessTokenDate)
