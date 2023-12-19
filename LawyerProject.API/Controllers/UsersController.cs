@@ -8,6 +8,7 @@ using LawyerProject.Application.Features.Commands.AppUsers.PasswordUpdate;
 using LawyerProject.Application.Features.Commands.AppUsers.UpdateUser;
 using LawyerProject.Application.Features.Queries.AppUser.GetAllUsers;
 using LawyerProject.Application.Features.Queries.AppUser.GetRolesToUser;
+using LawyerProject.Application.Features.Queries.AppUser.GetRolesToUserNameOrEmail;
 using LawyerProject.Application.Features.Queries.AppUser.GetUserByUserName;
 using LawyerProject.Application.Features.Queries.AppUser.GetUserForProfile;
 using MediatR;
@@ -94,6 +95,14 @@ namespace LawyerProject.API.Controllers
         public async Task<IActionResult> GetRolesToUser([FromRoute] GetRolesToUserQueryRequest request)
         {
             GetRolesToUserQueryResponse response = await _mediator.Send(request);
+            return Ok(response);
+        }
+
+        [HttpGet("get-roles-to-usernameoremail/{UserNameOrEmail}")]
+        [AuthorizeDefinition(ActionType = ActionType.Reading, Definition = "Get Roles To UserNameOrEmail", Menu = "Users")]
+        public async Task<IActionResult> GetRolesToUserNameOrEmail([FromRoute] GetRolesToUserNameOrEmailQueryRequest request)
+        {
+            GetRolesToUserNameOrEmailQueryResponse response = await _mediator.Send(request);
             return Ok(response);
         }
     }

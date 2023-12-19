@@ -19,5 +19,7 @@ namespace LawyerProject.Application.Abstractions.Services
         int TotalUsersCount { get; }
         Task AssignRoleToUserAsync(string userId, string[] roles);
         Task<string[]> GetRolesToUserAsync(string userId);
+        Task<string[]> GetRolesToUserNameAsync(string userName);
+        Task<bool> HasRolePermissionToEndpointAsync(string name, string code);
     }
 }

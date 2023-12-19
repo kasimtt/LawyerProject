@@ -8,6 +8,7 @@ using LawyerProject.Application.Features.Commands.AppUsers.CreateUser;
 using LawyerProject.Application.Helpers;
 using LawyerProject.Application.Repositories.AdvertRepositories;
 using LawyerProject.Application.Repositories.CaseRepositories;
+using LawyerProject.Application.Repositories.EndpointRepositories;
 using LawyerProject.Domain.Entities;
 using LawyerProject.Domain.Entities.Identity;
 using LawyerProject.Persistence.Context;
@@ -29,13 +30,15 @@ namespace LawyerProject.Persistence.Services
         private readonly IMapper _mapper;
         private readonly ICaseReadRepository _caseReadRepository;
         private readonly IAdvertReadRepository _advertRepository;
+        private readonly IEndpointReadRepository _endpointReadRepository;
 
-        public UserService(UserManager<AppUser> userManager, IMapper mapper, LawyerProjectContext context, ICaseReadRepository caseReadRepository, IAdvertReadRepository advertRepository)
+        public UserService(UserManager<AppUser> userManager, IMapper mapper, LawyerProjectContext context, ICaseReadRepository caseReadRepository, IAdvertReadRepository advertRepository, IEndpointReadRepository endpointReadRepository)
         {
             _userManager = userManager;
             _mapper = mapper;
             _caseReadRepository = caseReadRepository;
             _advertRepository = advertRepository;
+            _endpointReadRepository = endpointReadRepository;
         }
 
         public async Task<CreateUserResponseDto> CreateAsync(CreateUserDto createUserDto)
@@ -177,6 +180,37 @@ namespace LawyerProject.Persistence.Services
                 return userRoles.ToArray();
             }
             return new string[] { };
+        }
+
+        public async Task<string[]> GetRolesToUserNameAsync(string userName)
+        {
+            AppUser user = await _userManager.FindByNameAsync(userName);
+            if (user != null)
+            {
+                var userRoles = await _userManager.GetRolesAsync(user);
+                return userRoles.ToArray();
+            }
+            return new string[] { };
+        }
+
+        public async Task<bool> HasRolePermissionToEndpointAsync(string name, string code)
+        {
+            var userRoles = await GetRolesToUserNameAsync(name);
+            if (!userRoles.Any())
+                return false;
+
+            Endpoint? endpoint = await _endpointReadRepository.Table.Include(e => e.Roles).FirstOrDefaultAsync(e => e.Code == code);
+            if (endpoint == null)
+                return false;
+
+            var endpointRoles = endpoint.Roles.Select(r => r.Name);
+            foreach (var userRole in userRoles)
+            {
+                foreach (var endpointRole in endpointRoles)
+                    if (userRole == endpointRole)
+                        return true;
+            }
+            return false;
         }
     }
 }

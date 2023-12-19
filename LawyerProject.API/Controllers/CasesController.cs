@@ -41,8 +41,6 @@ namespace LawyerProject.API.Controllers
         }
 
         [HttpGet("getall")]
-        [Authorize(AuthenticationSchemes = "Admin")]
-        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Cases, ActionType = ActionType.Reading, Definition = "Getall Cases")]
         public async Task<IActionResult> Get([FromQuery] Pagination pagination)
         {
             GetAllCaseQueryRequest request = new GetAllCaseQueryRequest { Pagination = pagination };

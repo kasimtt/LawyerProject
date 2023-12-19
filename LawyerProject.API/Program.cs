@@ -31,6 +31,7 @@ using Microsoft.AspNetCore.HttpLogging;
 using Serilog.Context;
 using LawyerProject.SignalR;
 using Microsoft.AspNetCore.Identity;
+using LawyerProject.API.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -43,6 +44,7 @@ builder.Services.AddControllers(opt =>
 {
     //opt.Filters.Add(typeof(UserActivity_));
     opt.Filters.Add<ValidationFilter>();
+    opt.Filters.Add<RolePermissionFilter>();
 })
     // FluentValidation kütüphanesinin yapýlandýrmasýný ekler. 
     .AddFluentValidation(configuration =>
