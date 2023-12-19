@@ -1,11 +1,17 @@
-﻿using LawyerProject.Application.Features.Commands.AppUsers.CreateUser;
+﻿using LawyerProject.Application.CustomAttributes;
+using LawyerProject.Application.Enums;
+using LawyerProject.Application.Features.Commands.AppUsers.AssignRoleToUser;
+using LawyerProject.Application.Features.Commands.AppUsers.CreateUser;
 using LawyerProject.Application.Features.Commands.AppUsers.GoogleLogin;
 using LawyerProject.Application.Features.Commands.AppUsers.LoginUser;
 using LawyerProject.Application.Features.Commands.AppUsers.PasswordUpdate;
 using LawyerProject.Application.Features.Commands.AppUsers.UpdateUser;
+using LawyerProject.Application.Features.Queries.AppUser.GetAllUsers;
+using LawyerProject.Application.Features.Queries.AppUser.GetRolesToUser;
 using LawyerProject.Application.Features.Queries.AppUser.GetUserByUserName;
 using LawyerProject.Application.Features.Queries.AppUser.GetUserForProfile;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,13 +32,13 @@ namespace LawyerProject.API.Controllers
         public async Task<IActionResult> CreateUser([FromBody] CreateUserCommadRequest request)
         {
             CreateUserCommandResponse response = await _mediator.Send(request);
-            if(response.Success)
+            if (response.Success)
             {
                 return Ok(response);
             }
             return BadRequest(response);
 
-            
+
 
         }
 
@@ -64,5 +70,34 @@ namespace LawyerProject.API.Controllers
             return Ok();
         }
 
+
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(ActionType = ActionType.Reading, Definition = "Get All Users", Menu = "Users")]
+        public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersQueryReqeuest request)
+        {
+            GetAllUsersQueryResponse response = await _mediator.Send(request);
+            return Ok(response);
+        }
+
+
+        [HttpPost("assign-role-to-user")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(ActionType = ActionType.Writing, Definition = "Assign Role To User", Menu = "Users")]
+        public async Task<IActionResult> AssignRoleToUser([FromBody] AssignRoleToUserCommandRequest request)
+        {
+            AssignRoleToUserCommandResponse response = await _mediator.Send(request);
+            return Ok(response);
+        }
+
+
+        [HttpGet("get-roles-to-user/{UserID}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(ActionType = ActionType.Reading, Definition = "Get Roles To User", Menu = "Users")]
+        public async Task<IActionResult> GetRolesToUser([FromRoute] GetRolesToUserQueryRequest request)
+        {
+            GetRolesToUserQueryResponse response = await _mediator.Send(request);
+            return Ok(response);
+        }
     }
 }

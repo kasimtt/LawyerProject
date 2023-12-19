@@ -15,5 +15,9 @@ namespace LawyerProject.Application.Abstractions.Services
         Task<GetUserDto> GetUserByUserNameAsync(string userNameOrEmail);
         Task<GetUserDetailsDto> GetUserDetailsAsync(string userNameOrEmail);
         Task UpdatePasswordAsync(string userId, string resetToken, string newPassword);
+        Task<List<ListUser>> GetAllUsersAsync(int page, int size);
+        int TotalUsersCount { get; }
+        Task AssignRoleToUserAsync(string userId, string[] roles);
+        Task<string[]> GetRolesToUserAsync(string userId);
     }
 }
