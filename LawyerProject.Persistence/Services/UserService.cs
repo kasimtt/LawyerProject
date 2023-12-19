@@ -111,8 +111,8 @@ namespace LawyerProject.Persistence.Services
 
         public async Task<GetUserDetailsDto> GetUserDetailsAsync(string userNameOrEmail)
         {
-            
-           
+
+
 
             AppUser User = await _userManager.FindByNameAsync(userNameOrEmail);
             if (User == null)
@@ -121,7 +121,7 @@ namespace LawyerProject.Persistence.Services
                 throw new NotFoundUserException();
 
             IEnumerable<Case> _cases = _caseReadRepository.GetWhere(c => c.IdUserFK == User.Id).ToList();
-            IEnumerable<Advert> _adverts = _advertRepository.GetWhere(c=>c.IdUserFK == User.Id).ToList();
+            IEnumerable<Advert> _adverts = _advertRepository.GetWhere(c => c.IdUserFK == User.Id).ToList();
 
             IEnumerable<GetAdvertDtoWithoutUser> advertDto = _mapper.Map<IEnumerable<Advert>, IEnumerable<GetAdvertDtoWithoutUser>>(_adverts).ToList();
             IEnumerable<GetCaseDto> caseDto = _mapper.Map<IEnumerable<Case>, IEnumerable<GetCaseDto>>(_cases).ToList();
@@ -132,8 +132,48 @@ namespace LawyerProject.Persistence.Services
             GetUserDetailsDto dto = _mapper.Map<GetUserDetailsDto>(User);
             dto.Cases = caseDto;
             dto.Adverties = advertDto;
-            
+
             return dto;
+        }
+
+        public async Task<List<ListUser>> GetAllUsersAsync(int page, int size)
+        {
+            var users = await _userManager.Users
+                .Skip(page * size)
+                .Take(size)
+                .ToListAsync();
+
+            return users.Select(user => new ListUser
+            {
+                Id = user.Id,
+                Email = user.Email,
+                NameSurname = user.FirstName + user.LastName,
+                TwoFactorEnabled = user.TwoFactorEnabled,
+                UserName = user.UserName
+            }).ToList();
+        }
+
+        public int TotalUsersCount => _userManager.Users.Count();
+        public async Task AssignRoleToUserAsync(string userId, string[] roles)
+        {
+            AppUser user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                var userRoles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, userRoles);
+                await _userManager.AddToRolesAsync(user, roles);
+            }
+        }
+
+        public async Task<string[]> GetRolesToUserAsync(string userId)
+        {
+            AppUser user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                var userRoles = await _userManager.GetRolesAsync(user);
+                return userRoles.ToArray();
+            }
+            return new string[] { };
         }
     }
 }
