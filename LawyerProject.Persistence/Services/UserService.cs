@@ -126,8 +126,8 @@ namespace LawyerProject.Persistence.Services
             if (User == null)
                 throw new NotFoundUserException();
 
-            IEnumerable<Case> _cases = _caseReadRepository.GetWhere(c => c.IdUserFK == User.Id).ToList();
-            IEnumerable<Advert> _adverts = _advertRepository.GetWhere(c => c.IdUserFK == User.Id).ToList();
+            IEnumerable<Case> _cases = _caseReadRepository.GetWhere(c => c.IdUserFK == User.Id && c.DataState == Domain.Enums.DataState.Active).ToList();
+            IEnumerable<Advert> _adverts = _advertRepository.GetWhere(c => c.IdUserFK == User.Id && c.DataState == Domain.Enums.DataState.Active).ToList();
 
             IEnumerable<GetAdvertDtoWithoutUser> advertDto = _mapper.Map<IEnumerable<Advert>, IEnumerable<GetAdvertDtoWithoutUser>>(_adverts).ToList();
             IEnumerable<GetCaseDto> caseDto = _mapper.Map<IEnumerable<Case>, IEnumerable<GetCaseDto>>(_cases).ToList();
