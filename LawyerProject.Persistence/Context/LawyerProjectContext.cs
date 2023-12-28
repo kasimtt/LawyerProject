@@ -1,4 +1,5 @@
 ﻿using LawyerProject.Domain.Entities;
+using LawyerProject.Domain.Entities.Calculation;
 using LawyerProject.Domain.Entities.Identity;
 using LawyerProject.Persistence.EntityConfiguration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -38,6 +39,8 @@ namespace LawyerProject.Persistence.Context
             modelBuilder.Entity<AppRole>()
                 .HasMany(a => a.EndPoints)
                 .WithMany(a => a.Roles);
+
+            modelBuilder.Entity<NetToGross>().HasKey(n => n.ObjectId);
 
             modelBuilder.ApplyConfiguration(new AdvertConfiguration());
             modelBuilder.ApplyConfiguration(new CaseConfiguration());
@@ -91,6 +94,7 @@ namespace LawyerProject.Persistence.Context
         public DbSet<UserImageFile> FilesImages { get; set; }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<Endpoint> Endpoints { get; set; }
+        public DbSet<NetToGross> NetToGrosss { get; set; }
 
     }
 }

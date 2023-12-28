@@ -8,7 +8,7 @@ namespace LawyerProject.Application.Exceptions
 {
     public class NotFoundCaseException : Exception
     {
-        public NotFoundCaseException(): base("dava bulunamadı.")
+        public NotFoundCaseException(): base("Dava Bulunamadı")
         {
         }
 

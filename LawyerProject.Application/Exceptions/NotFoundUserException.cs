@@ -8,7 +8,7 @@ namespace LawyerProject.Application.Exceptions
 {
     public class NotFoundUserException : Exception
     {
-        public NotFoundUserException(): base("kullanici veya şifre hatalı")
+        public NotFoundUserException(): base("Kullanici veya Şifre Hatalı")
         {
         }
 
