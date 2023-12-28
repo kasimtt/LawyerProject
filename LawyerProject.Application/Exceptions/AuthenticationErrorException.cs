@@ -8,7 +8,7 @@ namespace LawyerProject.Application.Exceptions
 {
     public class AuthenticationErrorException : Exception
     {
-        public AuthenticationErrorException() : base("Kimlik doğrulama hatası") 
+        public AuthenticationErrorException() : base("Kimlik Doğrulama Hatası") 
         {
         }
 

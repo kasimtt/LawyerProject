@@ -8,7 +8,7 @@ namespace LawyerProject.Application.Exceptions
 {
     public class InvalidExternalAuthentication : Exception
     {
-        public InvalidExternalAuthentication(): base("kimlik doğrulama hatasi")
+        public InvalidExternalAuthentication(): base("Kimlik Doğrulama Hatasi")
         {
         }
 

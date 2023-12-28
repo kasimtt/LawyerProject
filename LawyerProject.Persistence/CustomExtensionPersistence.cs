@@ -1,6 +1,7 @@
 ﻿using LawyerProject.Application.Abstractions.Services;
 using LawyerProject.Application.Abstractions.Services.Authentication;
 using LawyerProject.Application.Repositories.AdvertRepositories;
+using LawyerProject.Application.Repositories.CalculationRepositories.NetToGrossRepository;
 using LawyerProject.Application.Repositories.CasePdfFileRepositories;
 using LawyerProject.Application.Repositories.CaseRepositories;
 using LawyerProject.Application.Repositories.EndpointRepositories;
@@ -9,6 +10,7 @@ using LawyerProject.Application.Repositories.MenuRepositories;
 using LawyerProject.Application.Repositories.UserActivityRepositories;
 using LawyerProject.Application.Repositories.UserImageFileRepositories;
 using LawyerProject.Persistence.Repositories.AdvertRepositories;
+using LawyerProject.Persistence.Repositories.CalculationRepositories.NetToGrossRepository;
 using LawyerProject.Persistence.Repositories.CasePdfFileRepositories;
 using LawyerProject.Persistence.Repositories.CaseRepositories;
 using LawyerProject.Persistence.Repositories.EndpointRepositories;
@@ -49,6 +51,12 @@ namespace LawyerProject.Persistence
 
             services.AddScoped<IMenuReadRepository, MenuReadRepository>();
             services.AddScoped<IMenuWriteRepository, MenuWriteRepository>();
+
+            services.AddScoped<INetToGroosReadRepository, NetToGroosReadRepository>();
+            services.AddScoped<INetToGroosWriteRepository, NetToGroosWriteRepository>();
+
+
+
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();

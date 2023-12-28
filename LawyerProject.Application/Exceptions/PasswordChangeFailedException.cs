@@ -8,7 +8,7 @@ namespace LawyerProject.Application.Exceptions
 {
     public class PasswordChangeFailedException : Exception
     {
-        public PasswordChangeFailedException() : base("Şifre güncellenirken bir hata oluştu!")
+        public PasswordChangeFailedException() : base("Şifre Güncellenirken Bir Hata Oluştu!")
         {
         }
 

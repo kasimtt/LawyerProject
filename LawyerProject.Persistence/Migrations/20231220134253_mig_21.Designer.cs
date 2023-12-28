@@ -4,6 +4,7 @@ using LawyerProject.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LawyerProject.Persistence.Migrations
 {
     [DbContext(typeof(LawyerProjectContext))]
-    partial class LawyerProjectContextModelSnapshot : ModelSnapshot
+    [Migration("20231220134253_mig_21")]
+    partial class mig_21
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,6 +132,9 @@ namespace LawyerProject.Persistence.Migrations
 
                     b.Property<int>("DataState")
                         .HasColumnType("int");
+
+                    b.Property<double>("NetFee")
+                        .HasColumnType("float");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");

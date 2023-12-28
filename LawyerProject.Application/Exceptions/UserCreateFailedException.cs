@@ -8,7 +8,7 @@ namespace LawyerProject.Application.Exceptions
 {
     public class UserCreateFailedException : Exception
     {
-        public UserCreateFailedException() : base("kullanıcı oluşturulurken beklenmeyen bir hatayla karşılaşıldı")
+        public UserCreateFailedException() : base("Kullanıcı Oluşturulurken Beklenmeyen Bir Hatayla Karşılaşıldı")
         {
         }
 
